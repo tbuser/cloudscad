@@ -1,0 +1,10 @@
+<% title "Scripts" %>
+
+<% for script in @scripts %>
+  <p class="script">
+      <h2><%= link_to script.name, script_path(script) %></h2>
+      by <%= link_to script.user.username, user_path(script.user) %> <%= time_ago_in_words(script.created_at) %> ago
+      <br/>
+      <%= simple_format(script.description) %>
+  </p>
+<% end %>
