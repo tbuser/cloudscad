@@ -1,0 +1,20 @@
+development:
+  adapter: mysql
+  database: cloudscad_dev
+  username: cloudscad
+  password: 
+  host: localhost
+
+test:
+  adapter: mysql
+  database: cloudscad_test
+  username: cloudscad
+  password: 
+  host: localhost
+
+production:
+  adapter: mysql
+  database: cloudscad
+  username: cloudscad
+  password: 
+  host: localhost
