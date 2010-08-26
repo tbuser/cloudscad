@@ -39,14 +39,23 @@ var renderer;
 /*var cube, plane;*/
 var mesh;
 
-var targetRotation = 0;
-var targetRotationOnMouseDown = 0;
-
 var mouseX = 0;
 var mouseXOnMouseDown = 0;
+var targetXRotation = 0;
+var targetXRotationOnMouseDown = 0;
+var targetXRotationOnMouseUp = 0;
+
+var mouseY = 0;
+var mouseYOnMouseDown = 0;
+var targetYRotation = 0;
+var targetYRotationOnMouseDown = 0;
+var targetYRotationOnMouseUp = 0;
 
 var windowHalfX = window.innerWidth / 2;
 var windowHalfY = window.innerHeight / 2;
+
+var timer = 0;
+var moving = 0;
 
 initScene("canvas_container");
 /*setInterval(sceneLoop, 1000/60);*/
@@ -58,7 +67,9 @@ function initScene(containerId) {
   container.innerHTML = "";
 
   camera = new THREE.Camera( 75, canvasWidth / canvasHeight, 0.0001, 10000 );
-  camera.position.z = -1000;
+  camera.position.z = -500;
+  camera.position.x = 500;
+  camera.position.y = 500;
 
   scene = new THREE.Scene();
 
@@ -130,85 +141,131 @@ function initScene(containerId) {
   stats.domElement.style.top = '0px';
   container.appendChild(stats.domElement);
 */
-	renderer.domElement.addEventListener('mousedown', onDocumentMouseDown, false);
-	renderer.domElement.addEventListener('touchstart', onDocumentTouchStart, false);
-	renderer.domElement.addEventListener('touchmove', onDocumentTouchMove, false);
+
+	renderer.domElement.addEventListener('mousedown', onCanvasMouseDown, false);
+	renderer.domElement.addEventListener('mousemove', onCanvasMouseMove, false);
+	renderer.domElement.addEventListener('mouseup', onCanvasMouseUp, false);
+	renderer.domElement.addEventListener('mouseout', onCanvasMouseOut, false);
+
+  renderer.domElement.addEventListener('DOMMouseScroll', onCanvasScroll, false);
+
+	renderer.domElement.addEventListener('touchstart', onCanvasTouchStart, false);
+	renderer.domElement.addEventListener('touchmove', onCanvasTouchMove, false);
+	renderer.domElement.addEventListener('gesturechange', onCanvasGestureChange, false);
 }
 
 //
 
-function onDocumentMouseDown( event ) {
+function onCanvasScroll(event) {
+  event.preventDefault();
+  
+  var rolled = 0;
+  
+  if (event.wheelDelta === undefined) {   // Firefox
+          // The measurement units of the detail and wheelDelta properties are different.
+      rolled = -40 * event.detail;
+  }
+  else {
+      rolled = event.wheelDelta;
+  }
+  
+  if (rolled > 0) {
+    // up
+    camera.position.z += 50;
+  } else {
+    // down
+    camera.position.z -= 50;
+  }
+}
 
-	event.preventDefault();
+function onCanvasGestureChange(event) {
+  event.preventDefault();
+  
+  if (event.scale > 1) {
+    camera.position.z += event.scale * 10;
+  } else {
+    camera.position.z -= event.scale * 10;
+  }
+}
 
-	renderer.domElement.addEventListener('mousemove', onDocumentMouseMove, false);
-	renderer.domElement.addEventListener('mouseup', onDocumentMouseUp, false);
-	renderer.domElement.addEventListener('mouseout', onDocumentMouseOut, false);
+function onCanvasMouseDown(event) {
+  event.preventDefault();
+
+  moving = 1;
 
 	mouseXOnMouseDown = event.clientX - windowHalfX;
-	targetRotationOnMouseDown = targetRotation;
+	targetXRotation = targetXRotationOnMouseUp;
+	targetXRotationOnMouseDown = targetXRotationOnMouseUp;
+
+	mouseYOnMouseDown = event.clientY - windowHalfY;
+	targetYRotation = targetYRotationOnMouseUp;
+	targetYRotationOnMouseDown = targetYRotationOnMouseUp;
 }
 
-function onDocumentMouseMove( event ) {
+function onCanvasMouseMove(event) {
+  mouseX = event.clientX - windowHalfX;
+	targetXRotation = targetXRotationOnMouseDown + (mouseX - mouseXOnMouseDown) * 0.02;
 
-	mouseX = event.clientX - windowHalfX;
-
-	targetRotation = targetRotationOnMouseDown + (mouseX - mouseXOnMouseDown) * 0.02;
+	mouseY = event.clientY - windowHalfY;
+	targetYRotation = targetYRotationOnMouseDown + (mouseY - mouseYOnMouseDown) * 0.02;
 }
 
-function onDocumentMouseUp( event ) {
-
-	renderer.domElement.addEventListener('mousemove', onDocumentMouseMove, false);
-	renderer.domElement.addEventListener('mouseup', onDocumentMouseUp, false);
-	renderer.domElement.addEventListener('mouseout', onDocumentMouseOut, false);
+function onCanvasMouseUp(event) {
+  targetXRotationOnMouseUp = targetXRotation;
+  targetYRotationOnMouseUp = targetYRotation;
+  moving = 0;  
 }
 
-function onDocumentMouseOut( event ) {
-
-	renderer.domElement.addEventListener('mousemove', onDocumentMouseMove, false);
-	renderer.domElement.addEventListener('mouseup', onDocumentMouseUp, false);
-	renderer.domElement.addEventListener('mouseout', onDocumentMouseOut, false);
+function onCanvasMouseOut(event) {
+  moving = 0;
 }
 
-function onDocumentTouchStart( event ) {
-
-	if(event.touches.length == 1) {
-
+function onCanvasTouchStart(event) {
+	if (event.touches.length == 1) {
+	  moving = 1;
+    
 		event.preventDefault();
 
 		mouseXOnMouseDown = event.touches[0].pageX - windowHalfX;
-		targetRotationOnMouseDown = targetRotation;
+		targetXRotationOnMouseDown = targetXRotation;
 
+		mouseYOnMouseDown = event.touches[0].pageY - windowHalfY;
+		targetYRotationOnMouseDown = targetYRotation;
 	}
 }
 
-function onDocumentTouchMove( event ) {
-
+function onCanvasTouchMove(event) {
 	if(event.touches.length == 1) {
-
 		event.preventDefault();
 
 		mouseX = event.touches[0].pageX - windowHalfX;
-		targetRotation = targetRotationOnMouseDown + (mouseX - mouseXOnMouseDown) * 0.05;
+		targetXRotation = targetXRotationOnMouseDown + (mouseX - mouseXOnMouseDown) * 0.02;
 
+		mouseY = event.touches[0].pageY - windowHalfY;
+		targetYRotation = targetYRotationOnMouseDown + (mouseY - mouseYOnMouseDown) * 0.02;
 	}
 }
 
 //
 
 function sceneLoop() {
+  // plane.rotation.z = cube.rotation.y += (targetRotation - cube.rotation.y) * 0.05;
+  if (moving == 1) {
+    //mesh.rotation.y += (targetXRotation - mesh.rotation.y) * 0.05;
+    //mesh.rotation.x -= (targetYRotation + mesh.rotation.x) * 0.05;
 
-/*  plane.rotation.z = cube.rotation.y += (targetRotation - cube.rotation.y) * 0.05;*/
-  mesh.rotation.y += (targetRotation - mesh.rotation.y) * 0.05;
+    mesh.rotation.y = targetXRotation;
+    mesh.rotation.x = targetYRotation;
+  }
 
+	//camera.position.x += (mouseX - camera.position.x) * 0.05;
+	//camera.position.y += (-mouseY - camera.position.y) * 0.05;
+	
+	// mesh.rotation.y += 0.005;
+	
 	renderer.render(scene, camera);
 	stats.update();
 }
-
-
-
-
-
 
 /*var CloudSCADMesh = function () {
 

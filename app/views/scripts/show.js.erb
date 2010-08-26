@@ -35,13 +35,20 @@ CloudSCADMesh.prototype.constructor = CloudSCADMesh;
 
 geometry = new CloudSCADMesh();
 
+
 for (var i = 0; i < geometry.faces.length; i++) {
   geometry.faces[i].color.setRGBA( Math.random() * 0.5, Math.random() * 0.5 + 0.5, Math.random() * 0.5 + 0.5, 1 );
+  // geometry.faces[i].color.setRGBA( 3, 9, 3, 1 );
 }
-
 mesh = new THREE.Mesh(geometry, new THREE.MeshFaceColorFillMaterial());
+
+
+// mesh = new THREE.Mesh(geometry, new THREE.MeshColorFillMaterial( 0xc0c0c0 ));
+// mesh.overdraw = true;
+// mesh.doubleSided = true;
+// mesh.flipSided = true;
 mesh.scale.x = mesh.scale.y = mesh.scale.z = 50;
 scene.addObject(mesh);
 
-setInterval(sceneLoop, 1000/60);
+timer = setInterval(sceneLoop, 1000/60);
 
