@@ -10,10 +10,12 @@ var CloudSCADMesh = function () {
   
   <% obj_hash["vertexes"].each do |vertex| -%>
 	  v(<%= vertex[0] %>, <%= vertex[1] %>, <%= vertex[2] %>);
+	  log("vertex: <%= vertex[0] %>, <%= vertex[1] %>, <%= vertex[2] %>");
   <% end -%>
 
   <% obj_hash["faces"].each do |face| -%>
 	  f3(<%= face[0] %>, <%= face[1] %>, <%= face[2] %>);
+	  log("face: <%= face[0] %>, <%= face[1] %>, <%= face[2] %>");
   <% end -%>
 
 	function v(x, y, z) {

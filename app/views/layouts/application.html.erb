@@ -52,7 +52,7 @@
     </div>
     
     <footer>
-      <%= link_to "Contact", "mailto:tbuser@gmail.com" %> | <%= link_to "Blog", "http://blog.cloudscad.com" %>
+      <%= link_to "About", "/about" %> | <%= link_to "Contact", "mailto:tbuser@gmail.com" %> | <%= link_to "Blog", "http://blog.cloudscad.com" %> | <%= link_to "STL Viewer", "/stl_viewer" %>
     </footer>
   </div> <!-- end of #container -->
 
@@ -72,6 +72,7 @@
   
   <script src="/javascripts/plugins.js?v=1"></script>
   <script src="/javascripts/script.js?v=1"></script>
+  <%= javascript_include_tag 'three_setup' %>
 
   <script>
   // var $j = jQuery.noConflict();
