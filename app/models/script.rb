@@ -5,7 +5,7 @@ class Script < ActiveRecord::Base
   
   validates_presence_of :name, :code, :user_id
 
-  OPENSCAD_PATH = "/Applications/OpenSCAD.app/Contents/MacOS/OpenSCAD"
+  OPENSCAD_PATH = File.exists?("/Applications/OpenSCAD.app/Contents/MacOS/OpenSCAD") ? "/Applications/OpenSCAD.app/Contents/MacOS/OpenSCAD" : "/usr/local/bin/openscad"
   
   def params
     params = {}
@@ -31,29 +31,7 @@ class Script < ActiveRecord::Base
   end
   
   def to_stl(params={})
-    # save code to tmp dir
-    scad_file = Tempfile.new("script_#{id}", "#{Rails.root}/tmp")
-    scad_file.print(code)
-    scad_file.flush
-
-    # create a temporary stl file
-    stl_file = Tempfile.new("script_#{id}", "#{Rails.root}/tmp")
-    stl_file.print("")
-    stl_file.flush
-    
-    # shell out to openscad
-    cmd = Script.openscad_command(scad_file.path, stl_file.path, params)
-    `#{cmd}`
-
-    # read contents of stl file
-    stl_data = stl_file.read
-
-    # delete temp files
-    scad_file.unlink
-    stl_file.unlink
-    
-    # return stl data
-    stl_data
+    Script.scad_to_stl(code, "script_#{id}", params)
   end
   
   def to_json3d(params={})
@@ -101,6 +79,33 @@ class Script < ActiveRecord::Base
   def to_obj_hash(params={})
     stl_data = to_stl(params)
     Script.parse_stl(stl_data)
+  end
+
+  # TODO: cache results?!
+  def self.scad_to_stl(scad_data, name, params={})    
+    # save code to tmp dir
+    scad_file = Tempfile.new(name, "#{Rails.root}/tmp")
+    scad_file.print(scad_data)
+    scad_file.flush
+
+    # create a temporary stl file
+    stl_file = Tempfile.new(name, "#{Rails.root}/tmp")
+    stl_file.print("")
+    stl_file.flush
+    
+    # shell out to openscad
+    cmd = Script.openscad_command(scad_file.path, stl_file.path, params)
+    `#{cmd}`
+
+    # read contents of stl file
+    stl_data = stl_file.read
+
+    # delete temp files
+    scad_file.unlink
+    stl_file.unlink
+    
+    # return stl data
+    stl_data
   end
 
   def self.parse_stl(stl_data)
