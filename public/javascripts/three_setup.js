@@ -477,6 +477,8 @@ mySTLMesh.prototype.constructor = mySTLMesh;
 //   endfacet
 // endsolid
 
+// using plain javascript instead of jquery so that it's easily portable and I can share it...
+
 // indexOf only finds strings? seriously Javascript, seriously?!
 Array.prototype.indexOf = function(searchstring, indexstart) {
   if (indexstart == undefined) {
@@ -493,6 +495,7 @@ Array.prototype.indexOf = function(searchstring, indexstart) {
 	return result;
 };
 
+// FIXME: optimization me please!
 function parse_stl(stl_data) {
   // build stl's vertex and face arrays
   
@@ -512,7 +515,8 @@ function parse_stl(stl_data) {
   for (var i=0; i<facet_blocks.length; i++) {
     facet_block = facet_blocks[i];
     // log(i + " BLOCK: " + facet_block + "\n");
-    
+
+    // FIXME: some STL files have extended notation like 1.12312e-12, should probably just split on spaces instead of regex...
     normal_blocks = /normal ([-+]?[0-9]*\.?[0-9]+) ([-+]?[0-9]*\.?[0-9]+) ([-+]?[0-9]*\.?[0-9]+) outer/.exec(facet_block);
     normal_points = [parseFloat(normal_blocks[1]), parseFloat(normal_blocks[2]), parseFloat(normal_blocks[3])];
     normals.push(normal_points);
