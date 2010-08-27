@@ -1,4 +1,7 @@
 * add caching!?
+
+* add Bespin editor back now that I've switched to jquery instead of prototype
+* add script editor previews
 * add STL file uploads
 * add DXF file uploads
 * add Projects - allow you to combine multiple Scripts/files together so that Scripts can include other files
