@@ -4,7 +4,7 @@ class ScriptsController < ApplicationController
   before_filter :get_script, :except => [:index, :new, :create, :preview]
   
   def index
-    @scripts = Script.paginate :page => params["page"]
+    @scripts = Script.paginate :page => params["page"], :order => "created_at DESC"
 
     respond_to do |format|
       format.html
