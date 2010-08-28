@@ -31,7 +31,9 @@ namespace :deploy do
   end
 end
 
-after :setup do
+after "deploy:setup" do
+  run "#{try_sudo} /bin/chown -R #{user}:#{user} #{deploy_to}"
+
   database_configuration = <<-EOF
 login: &login
   adapter: mysql
@@ -55,9 +57,20 @@ EOF
   run "mkdir -p #{deploy_to}/shared/config" 
   put database_configuration, "#{deploy_to}/shared/config/database.yml" 
 
+  # run "ln -nfs #{deploy_to}/shared/config/database.yml #{release_path}/config/database.yml"
+
+  run "#{try_sudo} /bin/chown -R #{user}:#{user} #{deploy_to}"  
+end
+
+after "deploy:update_code" do
   run "ln -nfs #{deploy_to}/shared/config/database.yml #{release_path}/config/database.yml"
 end
 
-after :finalize_update do
-  run "ln -nfs #{deploy_to}/shared/config/database.yml #{release_path}/config/database.yml"
+after "deploy:update_code", "gems:install"
+
+namespace :gems do
+  desc "Install gems"
+  task :install, :roles => :app do
+    run "cd #{current_release} && #{sudo} rake gems:install"
+  end
 end
