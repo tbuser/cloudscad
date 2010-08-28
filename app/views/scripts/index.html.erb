@@ -1,5 +1,9 @@
 <% title "Scripts" %>
 
+<p class="warning">
+  WARNING:  This is a just test, if this had been an actual website then everything would work and data you enter would not be randomly deleted at any time.  Thank you for testing CloudSCAD.
+</p>
+
 <% for script in @scripts %>
   <p class="script">
       <h2><%= link_to script.name, script_path(script) %></h2>
@@ -8,3 +12,5 @@
       <%= simple_format(script.description) %>
   </p>
 <% end %>
+
+<%= will_paginate @scripts %>

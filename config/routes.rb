@@ -6,7 +6,7 @@ ActionController::Routing::Routes.draw do |map|
 
   map.resources :users
 
-  map.resources :scripts
+  map.resources :scripts, :collection => {:preview => :get}
 
   # The priority is based upon order of creation: first created -> highest priority.
 

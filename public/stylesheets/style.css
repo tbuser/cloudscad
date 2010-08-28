@@ -76,9 +76,10 @@ button {  width: auto; overflow: visible; }
     Author: Tony Buser
  */
 
-div#user_nav {
+#user_nav {
  float: right;
  font-size: 0.9em;
+ text-align: right;
 }
 
 .label_description {
@@ -123,6 +124,29 @@ canvas.object {
   width: 100%;
   height: 300px;
   border: 1px solid black;
+}
+
+.warning {
+  color: red;
+}
+
+#script_code {
+  width: 100%;
+  height: 600px;
+}
+
+textarea {
+  width: 100%;
+  height: 150px;
+}
+
+header h1 a {
+  text-decoration: none;
+}
+
+header .avatar {
+  vertical-align: top;
+  padding-top: 5px;
 }
 
 /* standard rails stuff */

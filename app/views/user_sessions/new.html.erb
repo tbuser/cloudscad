@@ -1,5 +1,9 @@
 <% title "Login" %>
 
+<p>
+  Sorry, to prevent server overload, CloudSCAD is currently restricted to registered users only.  Feel free to play with the <%= link_to "STL Viewer", "/stl_viewer" %> in the mean time.
+</p>
+
 <% form_for @user_session do |f| %>
   <%= f.error_messages %>
   <p>

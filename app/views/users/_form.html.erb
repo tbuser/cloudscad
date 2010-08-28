@@ -16,5 +16,13 @@
     <%= f.label :password_confirmation %><br />
     <%= f.password_field :password_confirmation %>
   </p>
+  
+  <% if @user.new_record? -%>
+    <p>
+      <%= f.label :invitation_code %><br />
+      <%= text_field_tag :invitation_code, params["invitation_code"] %>
+    </p>
+  <% end -%>
+  
   <p><%= f.submit "Submit" %></p>
 <% end %>

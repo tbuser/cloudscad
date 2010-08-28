@@ -5,7 +5,7 @@
   <!--[if IE]><![endif]-->
 
   <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
-  <title><%= h(yield(:title) || "Untitled") %></title>
+  <title>CloudSCAD - <%= h(yield(:title) || "Untitled") %></title>
   <meta name="description" content="">
   <meta name="author" content="">
   <meta name="viewport" content="width=device-width; initial-scale=1.0; maximum-scale=1.0;">
@@ -26,10 +26,14 @@
   <div id="container">
     <header>
       <div id="user_nav">
-        <% if current_user %>
+        <% if current_user %>          
           <%= link_to "New Script", new_script_path %> |
           <%= link_to "Edit Profile", edit_user_path(:current) %> |
           <%= link_to "Logout", logout_path %>
+
+          <br/>
+
+          <%= link_to avatar_image_tag(current_user.email, {:size => 40, :default => "mm"}, {:class => "avatar"}), user_path(current_user) %>
         <% else %>
           <%= link_to "Register", new_user_path %> |
           <%= link_to "Login", login_path %>
@@ -37,6 +41,7 @@
       </div>
 
       <h1><%= link_to "CloudSCAD", root_path %></h1>
+      <br/>
     </header>
     
     <div id="main">
@@ -51,28 +56,36 @@
       <%= yield %>
     </div>
     
-    <footer>
-      <%= link_to "About", "/about" %> | <%= link_to "Contact", "mailto:tbuser@gmail.com" %> | <%= link_to "Blog", "http://blog.cloudscad.com" %> | <%= link_to "STL Viewer", "/stl_viewer" %>
+    <footer style="height:50px">
+      <div style="float:right;text-align: right;">
+        Hosted By<br/>
+        <%= link_to(image_tag("cloudfab_logo_small.gif"), "http://cloudfab.com") %>
+      </div>
+      
+      <%= link_to "About", "/about" %> | <%= link_to "Contact", "mailto:tbuser@gmail.com" %> | <%= link_to "Blog", "http://blog.cloudscad.com" %> | <%= link_to "STL Viewer", "/stl_viewer" %>      
     </footer>
-  </div> <!-- end of #container -->
+  </div>
 
   <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.4.2/jquery.min.js"></script>
   <script>!window.jQuery && document.write('<script src="/javascripts/jquery-1.4.2.min.js"><\/script>')</script>
+
+  <link id="bespin_base" href="/javascripts/bespin"/>
+  <%= javascript_include_tag 'bespin/BespinEmbedded' %>
   
-  <!-- <%= javascript_include_tag 'canvas3d/scene' %>
+  <!-- 
+  <%= javascript_include_tag 'canvas3d/scene' %>
   <%= javascript_include_tag 'canvas3d/vec3' %>
   <%= javascript_include_tag 'canvas3d/matrix3' %>
   <%= javascript_include_tag 'canvas3d/camera' %>
   <%= javascript_include_tag 'canvas3d/mesh' %>
   <%= javascript_include_tag 'canvas3d/light' %>
-  <%= javascript_include_tag 'canvas3d/setup' %> -->
+  <%= javascript_include_tag 'canvas3d/setup' %>
+  -->
 
   <%= javascript_include_tag 'three' %>
-  <script type="text/javascript" src="http://github.com/mrdoob/stats.js/raw/master/build/Stats.js"></script>
-  
-  <script src="/javascripts/plugins.js?v=1"></script>
-  <script src="/javascripts/script.js?v=1"></script>
-
+  <script type="text/javascript" src="http://github.com/mrdoob/stats.js/raw/master/build/Stats.js"></script>  
+  <%= javascript_include_tag 'plugins' %>
+  <%= javascript_include_tag 'script' %>
   <%= javascript_include_tag 'three_setup' %>
 
   <script>
@@ -88,17 +101,17 @@
     <script src="js/dd_belatedpng.js?v=1"></script>
   <![endif]-->
 
-  <script src="/javascripts/profiling/yahoo-profiling.min.js?v=1"></script>
-  <script src="/javascripts/profiling/config.js?v=1"></script>
+  <%= javascript_include_tag 'profiling/yahoo-profiling.min' %>
+  <%= javascript_include_tag 'profiling/config' %>
 
   <% if RAILS_ENV == "production" -%>
-  <script>
-   var _gaq = [['_setAccount', 'UA-274808-10'], ['_trackPageview']]; 
-   (function(d, t) {
-    var g = d.createElement(t), s = d.getElementsByTagName(t)[0];
-    g.async = true; g.src = '//www.google-analytics.com/ga.js'; s.parentNode.insertBefore(g, s);
-   })(document, 'script');
-  </script>
+    <script>
+     var _gaq = [['_setAccount', 'UA-274808-10'], ['_trackPageview']]; 
+     (function(d, t) {
+      var g = d.createElement(t), s = d.getElementsByTagName(t)[0];
+      g.async = true; g.src = '//www.google-analytics.com/ga.js'; s.parentNode.insertBefore(g, s);
+     })(document, 'script');
+    </script>
   <% end -%>
   
 </body>

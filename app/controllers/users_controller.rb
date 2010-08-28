@@ -1,29 +1,57 @@
 class UsersController < ApplicationController
+  before_filter :require_no_user, :only => [:new, :create]
+  before_filter :require_user, :only => [:show, :edit, :update]
+
+  before_filter :get_user, :except => [:new, :create]
+  
   def new
     @user = User.new
   end
   
   def create
-    @user = User.new(params[:user])
-    if @user.save
-      flash[:notice] = "Registration successful."
-      redirect_to root_url
+    if ['teaearlgreyhot','iwillhiretony'].include?(params[:invitation_code])
+      ok = true
     else
+      ok = false
+    end
+
+    @user = User.new(params[:user])
+    
+    if ok and @user.save
+      flash[:notice] = "Registration successful."
+      redirect_back_or_default root_url
+    else
+      @user.errors.add_to_base "Invitation Code was incorrect, maybe he didn't like the cookies..." unless ok      
       render :action => 'new'
     end
   end
   
+  def show
+    respond_to do |format|
+      format.html
+      format.xml { render :xml => @user }
+    end
+  end
+  
   def edit
-    @user = current_user
   end
   
   def update
-    @user = current_user
-    if @user.update_attributes(params[:user])
-      flash[:notice] = "Successfully updated profile."
-      redirect_to root_url
-    else
-      render :action => 'edit'
+    respond_to do |format|
+      if @user.update_attributes(params[:user])
+        flash[:notice] = "Successfully updated profile."
+        format.html { redirect_to @user }
+        format.xml { head :ok }
+      else
+        format.html { render :action => 'edit' }
+        format.xml { render :xml => @user.errors, :status => :unprocessable_entity }
+      end
     end
+  end
+  
+  private
+  
+  def get_user
+    @user = current_user
   end
 end

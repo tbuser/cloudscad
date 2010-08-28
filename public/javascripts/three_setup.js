@@ -29,8 +29,10 @@ var windowHalfY = window.innerHeight / 2;
 var timer = 0;
 var moving = 0;
 
-initScene("canvas_container");
-// setInterval(sceneLoop, 1000/60);
+if (document.getElementById('canvas_container') != null) {
+  initScene("canvas_container");
+  // setInterval(sceneLoop, 1000/60);
+}
 
 function initScene(containerId) {
 
@@ -345,7 +347,7 @@ scene.addObject(mesh);
 setInterval(sceneLoop, 1000/60);*/
 
 
-var mySTLMesh = function(vertexes, faces) {
+var STLMesh = function(vertexes, faces) {
 	THREE.Geometry.call(this);
 
 	var scope = this;
@@ -371,8 +373,8 @@ var mySTLMesh = function(vertexes, faces) {
 	this.computeNormals();
 }
 
-mySTLMesh.prototype = new THREE.Geometry();
-mySTLMesh.prototype.constructor = mySTLMesh;
+STLMesh.prototype = new THREE.Geometry();
+STLMesh.prototype.constructor = STLMesh;
 
 
 
@@ -587,11 +589,16 @@ function load_stl_mesh(stl_data) {
   scene.removeObject(mesh);
 
   log("creating geometry")
-  geometry = new mySTLMesh(vertexes, faces);
+  geometry = new STLMesh(vertexes, faces);
 
   log("coloring faces")
   for (var i = 0; i < geometry.faces.length; i++) {
-    geometry.faces[i].color.setRGBA(Math.random() * 0.5, Math.random() * 0.5 + 0.5, Math.random() * 0.5 + 0.5, 1);
+    // random colors
+    // geometry.faces[i].color.setRGBA(Math.random() * 0.5, Math.random() * 0.5 + 0.5, Math.random() * 0.5 + 0.5, 1);
+
+    // shades of blue
+    geometry.faces[i].color.setRGBA(Math.random() * 0.5, Math.random() * 0.5 + 0.5, 1, 1);
+
     //geometry.faces[i].color.setRGBA(3, 9, 3, 1);
     // log("coloring face " + i)
   }

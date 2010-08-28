@@ -1,8 +1,15 @@
 class ScriptsController < ApplicationController
-  before_filter :get_script, :except => [:index, :new, :create]
+  before_filter :require_user
+
+  before_filter :get_script, :except => [:index, :new, :create, :preview]
   
   def index
-    @scripts = Script.all
+    @scripts = Script.paginate :page => params["page"]
+
+    respond_to do |format|
+      format.html
+      format.xml { render :xml => @scripts }
+    end
   end
   
   def new
@@ -11,21 +18,26 @@ class ScriptsController < ApplicationController
   
   def create
     @script = current_user.scripts.build(params[:script])
-    if @script.save
-      flash[:notice] = "Successfully created script."
-      redirect_to scripts_url
-    else
-      render :action => 'new'
+    
+    respond_to do |format|
+      if @script.save
+        flash[:notice] = "Successfully created script."
+        format.html { redirect_to @script }
+        format.xml { render :xml => @script, :status => :created, :location => @script }
+      else
+        format.html { render :action => 'new' }
+        format.xml { render :xml => @script.errors, :status => :unprocessable_entity }
+      end
     end
   end
 
   def show
     respond_to do |format|
       format.html
-      format.xml    { render :xml => @script.to_xml }
-      format.scad   { render :text => @script.code }
-      format.stl    { render :text => @script.to_stl(params) }
-      format.json3d { render :text => @script.to_json3d(params) }
+      format.xml    { render :xml   => @script                    }
+      format.scad   { render :text  => @script.code               }
+      format.stl    { render :text  => @script.to_stl(params)     }
+      format.json3d { render :text  => @script.to_json3d(params)  }
       format.js
     end
   end
@@ -34,18 +46,37 @@ class ScriptsController < ApplicationController
   end
   
   def update
-    if @script.update_attributes(params[:script])
-      flash[:notice] = "Successfully updated script."
-      redirect_to script_url(@script)
-    else
-      render :action => 'edit'
+    respond_to do |format|
+      if @script.update_attributes(params[:script])
+        flash[:notice] = "Successfully updated script."
+        format.html { redirect_to @script }
+        format.xml { head :ok }
+      else
+        format.html { render :action => 'edit' }
+        format.xml { render :xml => @script.errors, :status => :unprocessable_entity }
+      end
     end
   end
 
   def destroy
     @script.destroy
     flash[:notice] = "Script successfully deleted."
-    redirect_to scripts_url
+    
+    respond_to do |format|
+      format.html { redirect_to scripts_url }
+      format.xml { head :ok }
+    end
+  end
+  
+  def preview
+    @script = Script.new(:code => params["code"])
+    
+    respond_to do |format|
+      format.scad   { render :text  => @script.code               }
+      format.stl    { render :text  => @script.to_stl(params)     }
+      format.json3d { render :text  => @script.to_json3d(params)  }
+      format.js     { render :action => "show" }
+    end
   end
   
   private

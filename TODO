@@ -1,6 +1,5 @@
 * add caching!?
 
-* add Bespin editor back now that I've switched to jquery instead of prototype
 * add script editor previews
 * add STL file uploads
 * add DXF file uploads
@@ -15,6 +14,7 @@
 * maybe add OFF and DXF export options?
 * add more openscad specific color coding to Bespin
 * add openscad syntax completion to Bespin
+* add comments - DISQUS?
 
 * design a logo
 
