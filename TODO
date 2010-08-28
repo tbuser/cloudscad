@@ -15,6 +15,7 @@
 * add more openscad specific color coding to Bespin
 * add openscad syntax completion to Bespin
 * add comments - DISQUS?
+* figure out how to get openscad modifiers to render in previews - ie. # to make transparent subtrees
 
 * design a logo
 
