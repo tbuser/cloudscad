@@ -11,6 +11,14 @@
   <%= button_to_function "Preview", "return false", :id => "script_preview" %>
 
   <p>
+    Param parsing isn't perfect.  General format is:
+    <pre>
+      // description of param (required)
+      param_name = "comma"; // comma, delimited, list, of, possible, values (not required)
+    </pre>
+  </p>
+
+  <p>
     <%= f.label :code %><br />
     <%= f.text_area :code %>
   </p>

@@ -71,6 +71,8 @@ class ScriptsController < ApplicationController
   def preview
     @script = Script.new(:code => params["code"])
     
+    params.delete("code")
+    
     respond_to do |format|
       format.scad   { render :text  => @script.code               }
       format.stl    { render :text  => @script.to_stl(params)     }
