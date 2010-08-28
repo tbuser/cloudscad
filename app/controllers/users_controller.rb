@@ -2,7 +2,7 @@ class UsersController < ApplicationController
   before_filter :require_no_user, :only => [:new, :create]
   before_filter :require_user, :only => [:show, :edit, :update]
 
-  before_filter :get_user, :except => [:new, :create]
+  before_filter :get_user, :except => [:new, :create, :show]
   
   def new
     @user = User.new
@@ -27,6 +27,7 @@ class UsersController < ApplicationController
   end
   
   def show
+    @user = User.find(params[:id])
     respond_to do |format|
       format.html
       format.xml { render :xml => @user.to_xml(:except => [:crypted_password, :password_salt, :persistence_token]) }
