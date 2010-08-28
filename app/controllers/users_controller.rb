@@ -29,7 +29,7 @@ class UsersController < ApplicationController
   def show
     respond_to do |format|
       format.html
-      format.xml { render :xml => @user }
+      format.xml { render :xml => @user.to_xml(:except => [:crypted_password, :password_salt, :persistence_token]) }
     end
   end
   
