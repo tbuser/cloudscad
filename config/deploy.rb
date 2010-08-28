@@ -9,8 +9,9 @@ set :deploy_via, :remote_cache
 
 set :deploy_to, "/home/www/www.cloudscad.com"
 
-# default_run_options[:pty] = true
+default_run_options[:pty] = true
 set :user, "cloudscad"
+set :password, "m0by!"
 set :ssh_options, { :forward_agent => true }
 
 role :web, "174.143.174.217"                          # Your HTTP server, Apache/etc
@@ -28,4 +29,35 @@ namespace :deploy do
   task :restart, :roles => :app, :except => { :no_release => true } do
     run "#{try_sudo} touch #{File.join(current_path,'tmp','restart.txt')}"
   end
+end
+
+after :setup do
+  database_configuration = <<-EOF
+login: &login
+  adapter: mysql
+  host: localhost
+  username: #{user}
+  password: #{password}
+
+development:
+  database: <%= "#{application}_dev" %>
+  <<: *login
+
+test:
+  database: <%= "#{application}_test" %>
+  <<: *login
+
+production:
+  database: <%= "#{application}" %>
+  <<: *login
+EOF
+
+  run "mkdir -p #{deploy_to}/shared/config" 
+  put database_configuration, "#{deploy_to}/shared/config/database.yml" 
+
+  run "ln -nfs #{deploy_to}/shared/config/database.yml #{release_path}/config/database.yml"
+end
+
+after :finalize_update do
+  run "ln -nfs #{deploy_to}/shared/config/database.yml #{release_path}/config/database.yml"
 end
