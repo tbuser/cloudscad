@@ -1,59 +1,65 @@
-scene.removeObject(mesh);
+var stl_string = '<%= @script.to_stl(params).gsub(/\n/, '\\n') %>';
 
-var CloudSCADMesh = function () {
+load_stl_string(stl_string);
 
-	THREE.Geometry.call(this);
-
-	var scope = this;
-
-  <% obj_hash = @script.to_obj_hash(params) %>
-  
-  <% obj_hash["vertexes"].each do |vertex| -%>
-	  v(<%= vertex[0] %>, <%= vertex[1] %>, <%= vertex[2] %>);
-    // log("vertex: <%= vertex[0] %>, <%= vertex[1] %>, <%= vertex[2] %>");
-  <% end -%>
-
-  <% obj_hash["faces"].each do |face| -%>
-	  f3(<%= face[0] %>, <%= face[1] %>, <%= face[2] %>);
-    // log("face: <%= face[0] %>, <%= face[1] %>, <%= face[2] %>");
-  <% end -%>
-
-	function v(x, y, z) {
-
-		scope.vertices.push( new THREE.Vertex( new THREE.Vector3( x, y, z ) ) );
-	}
-
-	function f3(a, b, c) {
-
-		scope.faces.push( new THREE.Face3( a, b, c ) );
-	}
-
-	this.computeNormals();
-
-}
-
-CloudSCADMesh.prototype = new THREE.Geometry();
-CloudSCADMesh.prototype.constructor = CloudSCADMesh;
-
-geometry = new CloudSCADMesh();
-
-
-for (var i = 0; i < geometry.faces.length; i++) {
-  // random colors
-  // geometry.faces[i].color.setRGBA( Math.random() * 0.5, Math.random() * 0.5 + 0.5, Math.random() * 0.5 + 0.5, 1 );
-  // shade of blue
-  geometry.faces[i].color.setRGBA( Math.random() * 0.5, Math.random() * 0.5 + 0.5, 1, 1 );
-  // geometry.faces[i].color.setRGBA( 3, 9, 3, 1 );
-}
-mesh = new THREE.Mesh(geometry, new THREE.MeshFaceColorFillMaterial());
-
-
-// mesh = new THREE.Mesh(geometry, new THREE.MeshColorFillMaterial( 0xc0c0c0 ));
-// mesh.overdraw = true;
-// mesh.doubleSided = true;
-// mesh.flipSided = true;
-mesh.scale.x = mesh.scale.y = mesh.scale.z = 50;
-scene.addObject(mesh);
-
-timer = setInterval(sceneLoop, 1000/60);
-
+// 
+// 
+// scene.removeObject(mesh);
+// 
+// var CloudSCADMesh = function () {
+// 
+//  THREE.Geometry.call(this);
+// 
+//  var scope = this;
+// 
+//   <% obj_hash = @script.to_obj_hash(params) %>
+//   
+//   <% obj_hash["vertexes"].each do |vertex| -%>
+//    v(<%= vertex[0] %>, <%= vertex[1] %>, <%= vertex[2] %>);
+//     // log("vertex: <%= vertex[0] %>, <%= vertex[1] %>, <%= vertex[2] %>");
+//   <% end -%>
+// 
+//   <% obj_hash["faces"].each do |face| -%>
+//    f3(<%= face[0] %>, <%= face[1] %>, <%= face[2] %>);
+//     // log("face: <%= face[0] %>, <%= face[1] %>, <%= face[2] %>");
+//   <% end -%>
+// 
+//  function v(x, y, z) {
+// 
+//    scope.vertices.push( new THREE.Vertex( new THREE.Vector3( x, y, z ) ) );
+//  }
+// 
+//  function f3(a, b, c) {
+// 
+//    scope.faces.push( new THREE.Face3( a, b, c ) );
+//  }
+// 
+//  this.computeNormals();
+// 
+// }
+// 
+// CloudSCADMesh.prototype = new THREE.Geometry();
+// CloudSCADMesh.prototype.constructor = CloudSCADMesh;
+// 
+// geometry = new CloudSCADMesh();
+// 
+// 
+// for (var i = 0; i < geometry.faces.length; i++) {
+//   // random colors
+//   // geometry.faces[i].color.setRGBA( Math.random() * 0.5, Math.random() * 0.5 + 0.5, Math.random() * 0.5 + 0.5, 1 );
+//   // shade of blue
+//   geometry.faces[i].color.setRGBA( Math.random() * 0.5, Math.random() * 0.5 + 0.5, 1, 1 );
+//   // geometry.faces[i].color.setRGBA( 3, 9, 3, 1 );
+// }
+// mesh = new THREE.Mesh(geometry, new THREE.MeshFaceColorFillMaterial());
+// 
+// 
+// // mesh = new THREE.Mesh(geometry, new THREE.MeshColorFillMaterial( 0xc0c0c0 ));
+// // mesh.overdraw = true;
+// // mesh.doubleSided = true;
+// // mesh.flipSided = true;
+// mesh.scale.x = mesh.scale.y = mesh.scale.z = 50;
+// scene.addObject(mesh);
+// 
+// timer = setInterval(sceneLoop, 1000/60);
+// 

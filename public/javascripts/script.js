@@ -17,11 +17,13 @@ var editor = null;
 
 $(document).ready(function() {
   $('#custom_preview').click(function(e) {
+    info.innerHTML = "Loading STL..."
     $.get($(this).attr('action'), $('#custom_form').serialize(), null, "script");  
     return false;  
   });
 
   $('#script_preview').click(function(e) {
+    info.innerHTML = "Loading STL..."
     $.get("/scripts/preview", $.param({code:editor.value}), null, "script");  
     return false;  
   });
@@ -50,3 +52,7 @@ $(document).ready(function() {
     }
   }
 });
+
+function load_stl_string(stl_string) {
+  
+}
