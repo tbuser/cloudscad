@@ -91,7 +91,7 @@ namespace :bundler do
   # end
 
   task :bundle_new_release, :roles => :app, :except => { :no_release => true }  do
-    bundler.symlink_vendor
+    # bundler.symlink_vendor
     # if you don't commit your cache, remove --cached from this line
     run("cd #{release_path} && #{try_sudo} gem bundle --only #{rails_env} --cached")
   end
