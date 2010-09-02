@@ -4,17 +4,22 @@
   Sorry, to prevent server overload, CloudSCAD is currently restricted to registered users only.  Feel free to play with the <%= link_to "STL Viewer", "/stl_viewer" %> in the mean time.
 </p>
 
-<% form_for @user_session do |f| %>
-  <%= f.error_messages %>
-  <p>
+<%= form_for @user_session do |f| %>
+  <%= render "shared/error_messages", :target => @user_session %>
+
+  <div class="field">
     <%= f.label :username %><br />
     <%= f.text_field :username %>
-  </p>
-  <p>
+  </div>
+
+  <div class="field">
     <%= f.label :password %><br />
     <%= f.password_field :password %>
-  </p>
-  <p><%= f.submit "Submit" %></p>
+  </div>
+
+  <div class="action">
+    <%= f.submit "Submit" %>
+  </div>
 <% end %>
 
 

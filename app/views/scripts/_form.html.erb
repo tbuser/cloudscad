@@ -1,10 +1,10 @@
-<% form_for @script, :html => {:id => "script_form"} do |f| %>
-  <%= f.error_messages %>
+<%= form_for @script, :html => {:id => "script_form"} do |f| %>
+  <%= render "shared/error_messages", :target => @script %>
   
-  <p>
+  <div class="field">
     <%= f.label :name %><br />
     <%= f.text_field :name %>
-  </p>
+  </div>
 
   <div id="canvas_container"></div>
 
@@ -18,18 +18,18 @@
     </pre>
   </p>
 
-  <p>
+  <div class="field">
     <%= f.label :code %><br />
     <%= f.text_area :code %>
-  </p>
+  </div>
   
-  <p>
+  <div class="field">
     <%= f.label :description %><br />
     <%= f.text_area :description %>
-  </p>
+  </div>
   
-  <p>
+  <div class="action">
     <%= button_to_function "Save", "return false", :id => "script_save" %>
     <%= link_to "Cancel", :back %>
-  </p>
+  </div>
 <% end %>

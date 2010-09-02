@@ -1,28 +1,30 @@
-<% form_for @user do |f| %>
-  <%= f.error_messages %>
-  <p>
+<%= form_for @user do |f| %>
+  <%= render "shared/error_messages", :target => @user %>
+  <div class="field">
     <%= f.label :username %><br />
     <%= f.text_field :username %>
-  </p>
-  <p>
+  </div>
+  <div class="field">
     <%= f.label :email %><br />
     <%= f.text_field :email %>
-  </p>
-  <p>
+  </div>
+  <div class="field">
     <%= f.label :password %><br />
     <%= f.password_field :password %>
-  </p>
-  <p>
+  </div>
+  <div class="field">
     <%= f.label :password_confirmation %><br />
     <%= f.password_field :password_confirmation %>
-  </p>
+  </div>
   
   <% if @user.new_record? -%>
-    <p>
+    <div class="field">
       <%= f.label :invitation_code %><br />
       <%= text_field_tag :invitation_code, params["invitation_code"] %>
-    </p>
+    </div>
   <% end -%>
   
-  <p><%= f.submit "Submit" %></p>
+  <div class="actions">
+    <%= f.submit "Submit" %>
+  </div>
 <% end %>

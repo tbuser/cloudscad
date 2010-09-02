@@ -42,7 +42,7 @@
     <% end -%>
   </p>
 
-  <%= format_code(@script.code) %>
+  <%=raw format_code(@script.code) %>
 </div>
 
 <p>
@@ -50,7 +50,7 @@
   <%= simple_format(@script.description) %>
 </p>
 
-<% form_for @script, :url => script_path(@script, :format => :stl), :html => {:method => :get, :id => "custom_form"} do |f| %>
+<%= form_for @script, :url => script_path(@script, :format => :stl), :html => {:method => :get, :id => "custom_form"} do |f| %>
   <% if @script.params.size == 0 -%>
     <p class="warning">No Parameters Found.</p>
   <% else -%>
