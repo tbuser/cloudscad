@@ -77,10 +77,7 @@ end
 
 namespace :bundle do
   task :create_symlink, :roles => :app, :except => { :no_release => true } do
-    shared_bundle = File.join(shared_path, 'vendor/bundle')
-    release_bundle = File.join(release_path, 'vendor/bundle')
-    # if you don't commit your cache, add cache to this list
-    run("mkdir -p #{shared_bundle} && mkdir -p #{release_bundle} && ln -s #{shared_bundle} #{release_bundle}")
+    run("mkdir -p #{shared_path}/vendor/bundle && ln -s #{shared_path}/vendor/bundle #{release_path}/vendor")
   end
   
   task :install, :roles => :app, :except => { :no_release => true }  do
