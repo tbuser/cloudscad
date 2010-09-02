@@ -95,7 +95,7 @@ namespace :bundler do
     # if you don't commit your cache, remove --cached from this line
     # run("cd #{release_path} && #{try_sudo} gem bundle --only #{rails_env} --cached")
     rails_env = variables[:rails_env] || 'production'
-    run("cd #{release_path} && #{try_sudo} gem bundle --only #{rails_env}")
+    run("cd #{release_path} && #{try_sudo} bundle install --only #{rails_env}")
   end
 end
 
