@@ -43,6 +43,7 @@
     <header>
       <div id="user_nav">
         <% if current_user %>          
+          <%= link_to "New Project", new_project_path %> |
           <%= link_to "New Script", new_script_path %> |
           <%= link_to "Edit Profile", edit_user_path(:current) %> |
           <%= link_to "Logout", logout_path %>
@@ -68,6 +69,10 @@
       <%- if show_title? -%>
         <h1><%=h yield(:title) %></h1>
       <%- end -%>
+      
+      <p>
+        <%= link_to "Projects", projects_path %> | <%= link_to "Scripts", scripts_path %>
+      </p>
       
       <%= yield %>
     </div>

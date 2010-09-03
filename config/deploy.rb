@@ -77,7 +77,7 @@ end
 
 namespace :bundle do
   task :create_symlink, :roles => :app, :except => { :no_release => true } do
-    run("mkdir -p #{shared_path}/vendor/bundle && ln -s #{shared_path}/vendor/bundle #{release_path}/vendor")
+    run("mkdir -p #{release_path}/vendor && mkdir -p #{shared_path}/vendor/bundle && ln -s #{shared_path}/vendor/bundle #{release_path}/vendor/")
   end
   
   task :install, :roles => :app, :except => { :no_release => true }  do

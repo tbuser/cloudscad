@@ -1,15 +1,10 @@
 * add caching!?
 
-* add script editor previews
 * add STL file uploads
 * add DXF file uploads
 * add Projects - allow you to combine multiple Scripts/files together so that Scripts can include other files
-* generate stl/dxf thumbnails
+* generate stl/dxf thumbnail images
 * add versioning to objects - diff/rollback/etc
-* figure out how to calculate a better camera starting position based on size of object
-* get zoom working in all browsers
-* add top, left, right, diagonal, center, etc view buttons
-* figure out how to add lighting and wireframe to three.js or bug the developer or switch back to canvas3d
 * modify openscad to optimize command line compiling - cache cgal data between compiles? long running process?
 * maybe add OFF and DXF export options?
 * add more openscad specific color coding to Bespin
@@ -22,3 +17,5 @@
 * @clothbot suggested URL includes - so that a script can include a file hosted somewhere else, might make for interesting mashups
 
 * add skeinforge or some sort of slicing system - maybe superskein will be ready by then
+
+* setup gitolite for read/write git access - cron job to periodically update gitolite config from database?

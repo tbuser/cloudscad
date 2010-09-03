@@ -69,6 +69,8 @@ Rails30::Application.routes.draw do
     end
   end
 
+  resources :projects
+
   root :to => "scripts#index"
   
   match ':action' => 'pages'

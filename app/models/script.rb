@@ -5,8 +5,6 @@ class Script < ActiveRecord::Base
   
   validates_presence_of :name, :code, :user_id
 
-  OPENSCAD_PATH = File.exists?("/Applications/OpenSCAD.app/Contents/MacOS/OpenSCAD") ? "/Applications/OpenSCAD.app/Contents/MacOS/OpenSCAD" : "/usr/local/bin/openscad"
-  
   def params
     params = {}
 
