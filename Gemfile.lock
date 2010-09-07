@@ -46,9 +46,11 @@ GEM
       net-ssh (>= 2.0.14)
       net-ssh-gateway (>= 1.0.0)
     coderay (0.9.4)
+    daemons (1.0.10)
     diff-lcs (1.1.2)
     erubis (2.6.6)
       abstract (>= 1.0.0)
+    gem_plugin (0.2.3)
     grit (2.2.0)
       diff-lcs (~> 1.1)
       mime-types (~> 1.15)
@@ -59,6 +61,9 @@ GEM
       mime-types
       treetop (>= 1.4.5)
     mime-types (1.16)
+    mongrel (1.2.0.pre2)
+      daemons (~> 1.0.10)
+      gem_plugin (~> 0.2.3)
     mysql (2.8.1)
     net-scp (1.0.3)
       net-ssh (>= 1.99.1)
@@ -101,6 +106,7 @@ DEPENDENCIES
   capistrano
   coderay
   grit
+  mongrel (= 1.2.0.pre2)
   mysql (= 2.8.1)
   rails (= 3.0.0)
   will_paginate (~> 3.0.pre2)

@@ -128,7 +128,7 @@
   <%= javascript_include_tag 'profiling/yahoo-profiling.min' %>
   <%= javascript_include_tag 'profiling/config' %>
 
-  <% if RAILS_ENV == "production" -%>
+  <% if Rails.env == "production" -%>
     <script>
      var _gaq = [['_setAccount', 'UA-274808-10'], ['_trackPageview']]; 
      (function(d, t) {

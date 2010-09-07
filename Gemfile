@@ -8,3 +8,5 @@ gem 'authlogic', :git => 'git://github.com/odorcicd/authlogic.git', :branch => '
 gem 'coderay'
 gem "will_paginate", "~> 3.0.pre2"
 gem 'grit'
+
+gem 'mongrel', '1.2.0.pre2'
