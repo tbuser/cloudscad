@@ -1,3 +1,14 @@
 <% title @project.name %>
 
 <%= @project.name %>
+
+<table>
+  <tr>
+    <th>Name</th>
+  </tr>
+  <% @project.repo.commits.first.tree.contents.each do |content| -%>
+    <tr>
+      <td><%= content.name %></td>
+    </tr>
+  <% end -%>
+</table>

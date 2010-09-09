@@ -8,7 +8,11 @@ class Project < ActiveRecord::Base
   after_create :create_repo
   
   def path
-    "#{user.path}/#{name.downcase}.git"
+    File.join(REPO_ROOT, directory)
+  end
+  
+  def directory
+    File.join(user.username, "#{name.downcase}.git")
   end
   
   def repo
@@ -18,8 +22,10 @@ class Project < ActiveRecord::Base
   private
   
   def create_repo
-    # FileUtils.mkdir_p(path)
-    r = Grit::Repo.init(path)
-    # r.enable_daemon_serve
+    FileUtils.mkdir_p(path)
+    FileUtils.cp_r(DOT_GIT_PATH, File.join(path, ".git"))
+    File.open("#{name}.scad", 'w') { |f| f.write('cube([10,10,10], center=true);') }
+    repo.add("#{name}.scad")
+    repo.commit_index("new project")
   end
 end

@@ -9,7 +9,7 @@ class User < ActiveRecord::Base
   after_create :create_path
   
   def path
-    "#{REPO_ROOT}/#{username[0]}/#{username}"
+    File.join(REPO_ROOT, username)
   end
   
   private
