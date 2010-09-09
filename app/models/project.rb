@@ -24,8 +24,11 @@ class Project < ActiveRecord::Base
   def create_repo
     FileUtils.mkdir_p(path)
     FileUtils.cp_r(DOT_GIT_PATH, File.join(path, ".git"))
-    File.open("#{name}.scad", 'w') { |f| f.write('cube([10,10,10], center=true);') }
-    repo.add("#{name}.scad")
-    repo.commit_index("new project")
+
+    Dir.chdir(path) do
+      File.open("#{name}.scad", 'w') { |f| f.write('cube([10,10,10], center=true);') }
+      repo.add("#{name}.scad")
+      repo.commit_all("new project")
+    end
   end
 end
