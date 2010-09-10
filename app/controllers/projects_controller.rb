@@ -25,7 +25,12 @@ class ProjectsController < ApplicationController
   end
 
   def show
-    respond_with(@project)
+    case params[:content_type]
+    when "raw"
+      render :text => @project.repo.tree(params[:treeish], params[:path]).contents[0].data
+    else
+      respond_with(@project)
+    end
   end
 
   def edit
@@ -53,6 +58,13 @@ class ProjectsController < ApplicationController
     elsif params[:username].to_s != "" and params[:projectname].to_s != ""
       @project = Project.where(:users => {:username => params[:username]}, :name => params[:projectname]).includes(:user).first
     end
-    @path = params[:path].to_s.split("/")
+
+    params[:content_type] ||= "tree"
+    
+    params[:treeish] ||= "master"
+    
+    params[:path] ||= ""
+    
+    params[:path] = params[:path].split("/")
   end
 end

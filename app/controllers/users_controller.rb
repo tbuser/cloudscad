@@ -32,9 +32,9 @@ class UsersController < ApplicationController
     elsif params[:username].to_s != ""
       @user = User.where(:username => params[:username]).first
     end    
-    
+
     if @user.nil?
-      redirect_to :controller => "pages", :action => params[:username]
+      redirect_to "/pages/#{params[:username]}"
     else
       respond_to do |format|
         format.html

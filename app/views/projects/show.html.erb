@@ -1,7 +1,20 @@
 <% title @project.name.titleize %>
 
-Username: <%= params[:username] %> Projectname: <%= params[:projectname] %> Path: <%= params[:path] %>
+username: <%= params[:username] %> |
+projectname: <%= params[:projectname] %> |
+content_type: <%= params[:content_type] %> |
+treeish: <%= params[:treeish] %> |
+path: <%= params[:path].join("/") %>
 
-<%= render :partial => "tree_table", :locals => {:project => @project, :treeish => @treeish || "master", :path => @path || []} %>
+<%=
+case params[:content_type]
+when "tree"
+  render :partial => "tree", :locals => {:project => @project, :treeish => params[:treeish], :path => params[:path]}
+when "blob"
+  render :partial => "blob", :locals => {:project => @project, :treeish => params[:treeish], :path => params[:path]}
+else
+  raw('<p class="warning">Unknown Content Type</p>')
+end
+%>
 
 <%= simple_format(@project.description) %>

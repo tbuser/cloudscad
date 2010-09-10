@@ -44,7 +44,6 @@
       <div id="user_nav">
         <% if current_user %>          
           <%= link_to "New Project", new_project_path %> |
-          <%= link_to "New Script", new_script_path %> |
           <%= link_to "Edit Profile", edit_user_path(:current) %> |
           <%= link_to "Logout", logout_path %>
 
@@ -70,10 +69,6 @@
         <h1><%= yield(:title) %></h1>
       <%- end -%>
       
-      <p>
-        <%= link_to "Projects", projects_path %> | <%= link_to "Scripts", scripts_path %>
-      </p>
-      
       <%= yield %>
     </div>
     
@@ -83,7 +78,10 @@
         <%= link_to(image_tag("cloudfab_logo_small.gif"), "http://cloudfab.com") %>
       </div>
       
-      <%= link_to "About", "/about" %> | <%= link_to "Contact", "mailto:tbuser@gmail.com" %> | <%= link_to "Blog", "http://blog.cloudscad.com" %> | <%= link_to "STL Viewer", "/stl_viewer" %>      
+      <%= link_to "About", "/pages/about" %> | 
+      <%= link_to "Contact", "mailto:tbuser@gmail.com" %> | 
+      <%= link_to "Blog", "http://blog.cloudscad.com" %> | 
+      <%= link_to "STL Viewer", "/pages/stl_viewer" %>      
     </footer>
   </div>
 

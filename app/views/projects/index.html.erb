@@ -1,15 +1,9 @@
 <% title "Projects" %>
 
-<p class="warning">
-  WARNING:  Projects are very incomplete at the momment, most of this is not functional!
-</p>
-
 <% for project in @projects %>
   <p class="project">
-      <h2><%= link_to project.name, project %></h2>
+      <h2><%= link_to project.name, nice_project_path(project) %></h2>
       by <%= link_to project.user.username, project.user %> <%= time_ago_in_words(project.created_at) %> ago
-      <br/>
-      <%= simple_format(project.description) %>
   </p>
 <% end %>
 

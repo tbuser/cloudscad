@@ -1,0 +1,7 @@
+<p>
+  <%= link_to "raw", nice_project_path(project, "raw", treeish, File.join(path)) %>
+</p>
+
+<p>
+  <%= project.repo.tree(treeish, path).contents[0].data %>
+</p>
