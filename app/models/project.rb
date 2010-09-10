@@ -1,12 +1,16 @@
 class Project < ActiveRecord::Base
   validates_presence_of :user_id, :name
-  validates_uniqueness_of :name, :scope => :user_id
-  validates_format_of :name, :with => /[a-z0-9_.-]+/i
+  validates_uniqueness_of :name, :scope => :user_id, :case_sensitive => false
+  validates_format_of :name, :with => /\A([a-z0-9_.-]+)\Z/i
   
   belongs_to :user
   
   after_create :create_repo
   
+  def name=(str)
+    self[:name] = str.to_s.downcase.gsub(" ", "_")
+  end
+
   def path
     File.join(REPO_ROOT, directory)
   end
@@ -23,12 +27,14 @@ class Project < ActiveRecord::Base
   
   def create_repo
     FileUtils.mkdir_p(path)
-    FileUtils.cp_r(DOT_GIT_PATH, File.join(path, ".git"))
+    # FileUtils.cp_r(DOT_GIT_PATH, File.join(path, ".git"))
 
     Dir.chdir(path) do
-      File.open("#{name}.scad", 'w') { |f| f.write('cube([10,10,10], center=true);') }
-      repo.add("#{name}.scad")
-      repo.commit_all("new project")
+      r = `git init .`
+      raise "Failed to initialize project: #{r}" unless r.include?("Initialized empty Git repository in #{path}/.git/")
+      File.open("#{name.downcase}.scad", 'w') { |f| f.write('cube([10,10,10], center=true);') }
+      repo.add("#{name.downcase}.scad")
+      raise "Failed to add project script" unless repo.commit_all("new project")
     end
   end
 end

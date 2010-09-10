@@ -71,9 +71,12 @@ Rails30::Application.routes.draw do
 
   resources :projects
 
+  match 'pages/:action' => 'pages'
+
+  match ':username' => 'users#show'
+  match ':username/:projectname(/*path)' => 'projects#show'
+
   root :to => "scripts#index"
-  
-  match ':action' => 'pages'
 end
 
 # ActionController::Routing::Routes.draw do |map|

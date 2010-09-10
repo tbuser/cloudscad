@@ -1,6 +1,6 @@
 # CloudSCAD Configuration Variables
 
-DOT_GIT_PATH = "#{Rails.root}/vendor/dot_git"
+# DOT_GIT_PATH = "#{Rails.root}/vendor/dot_git"
 
 REPO_ROOT = if ENV["RAILS_ENV"] == "production"
   "/home/git/repositories"

@@ -27,10 +27,19 @@ class UsersController < ApplicationController
   end
   
   def show
-    @user = User.find(params[:id])
-    respond_to do |format|
-      format.html
-      format.xml { render :xml => @user.to_xml(:except => [:crypted_password, :password_salt, :persistence_token]) }
+    if params[:id].to_s != ""
+      @user = User.find(params[:id])
+    elsif params[:username].to_s != ""
+      @user = User.where(:username => params[:username]).first
+    end    
+    
+    if @user.nil?
+      redirect_to :controller => "pages", :action => params[:username]
+    else
+      respond_to do |format|
+        format.html
+        format.xml { render :xml => @user.to_xml(:except => [:crypted_password, :password_salt, :persistence_token]) }
+      end
     end
   end
   

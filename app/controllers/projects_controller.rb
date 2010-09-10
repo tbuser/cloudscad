@@ -48,6 +48,11 @@ class ProjectsController < ApplicationController
   private
 
   def get_project
-    @project = Project.find(params[:id])
+    if params[:id].to_s != ""
+      @project = Project.find(params[:id])
+    elsif params[:username].to_s != "" and params[:projectname].to_s != ""
+      @project = Project.where(:users => {:username => params[:username]}, :name => params[:projectname]).includes(:user).first
+    end
+    @path = params[:path].to_s.split("/")
   end
 end

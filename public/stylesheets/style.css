@@ -140,6 +140,10 @@ textarea {
   height: 150px;
 }
 
+div.field, div.actions {
+  margin-bottom: 10px;
+}
+
 header h1 a {
   text-decoration: none;
 }
@@ -147,6 +151,21 @@ header h1 a {
 header .avatar {
   vertical-align: top;
   padding-top: 5px;
+}
+
+table.tree {
+  border: 1px solid #c0c0c0;
+}
+
+table.tree td, table.tree th {
+  text-align: left;
+  padding: 5px;
+  border-top: 1px solid #c0c0c0;
+  border-bottom: 1px solid #c0c0c0;
+}
+
+table.tree {
+  width: 100%;
 }
 
 /* standard rails stuff */

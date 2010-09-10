@@ -1,14 +1,7 @@
-<% title @project.name %>
+<% title @project.name.titleize %>
 
-<%= @project.name %>
+Username: <%= params[:username] %> Projectname: <%= params[:projectname] %> Path: <%= params[:path] %>
 
-<table>
-  <tr>
-    <th>Name</th>
-  </tr>
-  <% @project.repo.commits.first.tree.contents.each do |content| -%>
-    <tr>
-      <td><%= content.name %></td>
-    </tr>
-  <% end -%>
-</table>
+<%= render :partial => "tree_table", :locals => {:project => @project, :treeish => @treeish || "master", :path => @path || []} %>
+
+<%= simple_format(@project.description) %>
