@@ -16,9 +16,15 @@ module ProjectsHelper
     
     image_tag(png)
   end
-  
-  def nice_project_path(project, content_type, treeish, path="")
-    "/#{project.user.username}/#{project.name}/#{content_type}/#{treeish}/#{path}"
+
+  def blob_display(blob)
+    case blob.mime_type 
+    when "application/sla"
+      "stl"
+    when "text/plain"
+      raw(format_code(blob.data))
+    else
+      "Binary Data"
+    end    
   end
-  
 end

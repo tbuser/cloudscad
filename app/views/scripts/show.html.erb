@@ -36,7 +36,7 @@
 
 <div class="side">
   <p> 
-    <%= link_to "Download", script_path(@script, :format => "scad") %> | <%= link_to "Clone", script_path(@script) %>
+    <%= link_to "Download", script_path(@script, :format => "scad") %> 
     <% if @script.user == current_user -%>
       | <%= link_to "Edit", edit_script_path(@script) %> | <%= link_to "Delete", script_path(@script), :method => :delete, :confirm => "Are you sure you want to delete this script?" %>
     <% end -%>

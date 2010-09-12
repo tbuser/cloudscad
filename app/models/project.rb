@@ -23,6 +23,20 @@ class Project < ActiveRecord::Base
     Grit::Repo.new(path)
   end
   
+  def url_path(content_type="", treeish="", path="")
+    unless path == ""
+      content_type = "tree" if content_type == ""
+      treeish = "master" if treeish == ""
+    end
+    
+    if content_type == "tree" and treeish == "master" and path == ""
+      content_type = ""
+      treeish = ""
+    end
+    
+    "/#{user.username}/#{name}/#{content_type}/#{treeish}/#{path}".gsub(/\/+/, '/')
+  end
+  
   private
   
   def create_repo

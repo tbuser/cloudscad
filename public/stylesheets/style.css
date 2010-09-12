@@ -98,11 +98,17 @@ header h1 {
 
 div#main h1 {
   font-size: 20pt;
-  margin-top: 0.75em 0;
+  margin: 0em 0em 0.75em 0em;
 }
 
 div#main h2 {
   font-size: 17pt;
+  margin: 0.75em 0em 0.75em 0em;
+}
+
+div#main h3 {
+  font-size: 14pt;
+  margin: 0.75em 0em 0.75em 0em;
 }
 
 p {

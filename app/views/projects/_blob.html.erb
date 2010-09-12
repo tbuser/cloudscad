@@ -1,7 +1,14 @@
+<% if @extension == ".scad" -%>
+  <%= render :partial => "custom_form", :locals => {:scad => Scad.new(@project, @blob.data, params[:path])} %>
+<% end -%>
+
 <p>
-  <%= link_to "raw", nice_project_path(project, "raw", treeish, File.join(path)) %>
+  <%= link_to "Download", @project.url_path("raw", params[:treeish], File.join(params[:path])) %>
+  <% if @project.user == current_user -%>
+    | <%= link_to "Edit", edit_project_path(@project) %> | <%= link_to "Delete", project_path(@project), :method => :destroy, :confirm => "Are you sure you want to delete the whole project?" %>
+  <% end -%>  
 </p>
 
 <p>
-  <%= project.repo.tree(treeish, path).contents[0].data %>
+  <%= blob_display(@blob) %>
 </p>

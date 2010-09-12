@@ -15,6 +15,10 @@ class User < ActiveRecord::Base
     File.join(REPO_ROOT, username)
   end
   
+  def url_path
+    "/#{username}"
+  end
+  
   private
   
   def cannot_change_username

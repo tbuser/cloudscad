@@ -1,20 +1,38 @@
 <% title @project.name.titleize %>
 
-username: <%= params[:username] %> |
-projectname: <%= params[:projectname] %> |
-content_type: <%= params[:content_type] %> |
-treeish: <%= params[:treeish] %> |
-path: <%= params[:path].join("/") %>
+<% if @project.user == current_user -%>
+  <%= link_to "Edit", edit_project_path(@project) %> | <%= link_to "Delete", project_path(@project), :method => :destroy, :confirm => "Are you sure you want to delete the whole project?" %>
+<% end -%>  
+
+<%= simple_format(@project.description) %>
+
+<h3>
+  <%= link_to @project.user.username, @project.user.url_path %> /
+  <%= link_to @project.name, @project.url_path("tree", params[:treeish]) %>
+  <% if params[:path].size > 0 -%>
+    <% params[:path][0..-2].each_with_index do |i, p| -%>
+      / <%= link_to p, @project.url_path("tree", params[:treeish], params[:path][0..i]) %>
+    <% end -%>
+    / <%= params[:path][-1] %>
+  <% end -%>
+</h3>
 
 <%=
 case params[:content_type]
 when "tree"
   render :partial => "tree", :locals => {:project => @project, :treeish => params[:treeish], :path => params[:path]}
 when "blob"
-  render :partial => "blob", :locals => {:project => @project, :treeish => params[:treeish], :path => params[:path]}
+  render :partial => "blob"
 else
   raw('<p class="warning">Unknown Content Type</p>')
 end
 %>
 
-<%= simple_format(@project.description) %>
+<p style="color:#c0c0c0;font-size:x-small">
+  DEBUG - 
+  username: <%= params[:username] %> |
+  projectname: <%= params[:projectname] %> |
+  content_type: <%= params[:content_type] %> |
+  treeish: <%= params[:treeish] %> |
+  path: <%= params[:path].join("/") %>
+</p>

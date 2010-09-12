@@ -2,8 +2,7 @@
 
 <% for project in @projects %>
   <p class="project">
-      <h2><%= link_to project.name, nice_project_path(project) %></h2>
-      by <%= link_to project.user.username, project.user %> <%= time_ago_in_words(project.created_at) %> ago
+      <strong><%= link_to project.user.username, project.user.url_path %> / <%= link_to project.name, project.url_path %></strong> <%= time_ago_in_words(project.created_at) %> ago
   </p>
 <% end %>
 
