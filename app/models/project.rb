@@ -40,19 +40,39 @@ class Project < ActiveRecord::Base
   end
   
   def update_blob_attributes(params)
+    Dir.chdir(path) do
+      current_name = params[:path].split("/")[-1]
     
+      if current_name != params[:name]
+        old_path = params[:path]
+        params[:path] = params[:path].split("/")[0..-2].join("/") + params[:name]
+        # TODO: needs error checking?
+        repo.git.mv({}, old_path, params[:path])
+      end
+
+      File.open(File.join(path,params[:path]), 'w') do |f|
+        f.write(params[:data])
+      end
+    
+      if repo.commit_all(params[:message]) == ""
+        errors.add_to_base("Failed To Commit Changes")
+        return false
+      end
+    end
   end
   
   private
   
   def create_repo
     FileUtils.mkdir_p(path)
-    # FileUtils.cp_r(DOT_GIT_PATH, File.join(path, ".git"))
 
     Dir.chdir(path) do
-      r = `git init .`
+      # r = `git init .`
+      r = repo.git.init({}, ".")
       raise "Failed to initialize project: #{r}" unless r.include?("Initialized empty Git repository in #{path}/.git/")
-      File.open("#{name.downcase}.scad", 'w') { |f| f.write('cube([10,10,10], center=true);') }
+      File.open("#{name.downcase}.scad", 'w') do |f|
+        f.write('// Size of cube\nsize = 20;\n\ntranslate([0, 0, size/2]) cube([size,size,size], center=true);')
+      end
       repo.add("#{name.downcase}.scad")
       raise "Failed to add project script" unless repo.commit_all("new project")
     end

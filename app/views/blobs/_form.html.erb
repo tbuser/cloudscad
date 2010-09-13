@@ -1,0 +1,22 @@
+<%= hidden_field_tag "blob[treeish]", params[:treeish] %>
+<%= hidden_field_tag "blob[path]", params[:path].split("/") %>
+
+<div class="field">
+  <%= label_tag "File Name" %><br />
+  <%= text_field_tag "blob[name]", params[:blob][:name] %>
+</div>
+
+<div class="field">
+  <%= label_tag "Data" %><br />
+  <%= text_area_tag "blob[data]", params[:blob][:data] %>
+</div>
+
+<div class="field">
+  <%= label_tag "Change Log Message" %><br />
+  <%= text_field_tag "blob[message]", params[:blob][:message], :style => "width:100%" %>
+</div>
+
+<div class="action">
+  <%= button_to_function "Save", "return false", :id => "blob_save" %>
+  <%= link_to "Cancel", :back %>
+</div>

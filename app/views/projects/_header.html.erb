@@ -1,0 +1,18 @@
+<% title @project.name.titleize %>
+
+<% if @project.user == current_user -%>
+  <%= link_to "Edit", edit_project_path(@project) %> | <%= link_to "Delete", project_path(@project), :method => :destroy, :confirm => "Are you sure you want to delete the whole project?" %>
+<% end -%>  
+
+<%= simple_format(@project.description) %>
+
+<h3>
+  <%= link_to @project.user.username, @project.user.url_path %> /
+  <%= link_to @project.name, @project.url_path("tree", params[:treeish]) %>
+  <% if params[:path].size > 0 -%>
+    <% params[:path][0..-2].each_with_index do |i, p| -%>
+      / <%= link_to p, @project.url_path("tree", params[:treeish], params[:path][0..i]) %>
+    <% end -%>
+    / <%= params[:path][-1] %>
+  <% end -%>
+</h3>

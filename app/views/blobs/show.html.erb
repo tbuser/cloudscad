@@ -1,5 +1,7 @@
+<%= render :partial => "/projects/header" %>
+
 <% if @extension == ".scad" -%>
-  <%= render :partial => "custom_form", :locals => {:scad => Scad.new(:project => @project, :code => @blob.data, :path => params[:path])} %>
+  <%= render :partial => "custom", :locals => {:scad => Scad.new(:project => @project, :code => @blob.data, :path => params[:path])} %>
 <% end -%>
 
 <p>
@@ -16,3 +18,5 @@
 <p>
   <%= blob_display(@blob) %>
 </p>
+
+<%= render :partial => "/projects/footer" %>

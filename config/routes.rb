@@ -63,23 +63,25 @@ Rails30::Application.routes.draw do
 
   resources :users
 
-  resources :scripts do
-    collection do
-      get 'preview'
-    end
-  end
-
-  resources :projects do
-    collection do
-      get 'preview'
-    end
-  end
+  resources :projects
 
   match 'pages/:action' => 'pages'
 
   match ':username' => 'users#show'
+
+  # match ':username/:projectname((/:content_type(/:treeish(/*path))))' => 'projects#show'
   
-  match ':username/:projectname((/:content_type(/:treeish(/*path))))' => 'projects#show'
+  scope ':username/:projectname' do
+    get '((/:content_type(/:treeish(/*path))))' => 'trees#show', :constraints => {:content_type => /tree/}
+
+    get '((/:content_type(/:treeish(/*path))))' => 'blobs#show', :constraints => {:content_type => /blob|download/}
+    get '((/:content_type(/:treeish(/*path))))' => 'blobs#new', :constraints => {:content_type => /blob-new/}
+    get '((/:content_type(/:treeish(/*path))))' => 'blobs#edit', :constraints => {:content_type => /blob-edit/}
+    post '((/:content_type(/:treeish(/*path))))' => 'blobs#create', :constraints => {:content_type => /blob-create/}
+    put '((/:content_type(/:treeish(/*path))))' => 'projects#update', :constraints => {:content_type => /blob-update/}
+    delete '((/:content_type(/:treeish(/*path))))' => 'projects#delete', :constraints => {:content_type => /blob-delete/}
+  end
+
 
   root :to => "projects#index"
 end

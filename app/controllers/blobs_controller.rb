@@ -1,16 +1,11 @@
-class ProjectsController < ApplicationController
+class BlobsController < ApplicationController
   before_filter :require_user
-  before_filter :get_project, :except => [:index, :new, :create, :preview]
+  before_filter :get_project, :except => [:preview]
+  before_filter :get_blob, :ecpt => [:index, :new, :create, :preview]
 
   respond_to :html, :xml, :json
 
-  def index
-    @projects = Project.paginate :page => params["page"], :order => "created_at DESC"
-    respond_with(@projects)
-  end
-
   def new
-    @project = Project.new
     respond_with(@project)
   end
 
@@ -32,9 +27,6 @@ class ProjectsController < ApplicationController
     when "blob"
       @blob = @project.repo.tree(params[:treeish], params[:path]).contents[0]
       @extension = File.extname(@blob.name)
-    when "blob-edit"
-      @blob = @project.repo.tree(params[:treeish], params[:path]).contents[0]
-      params[:blob] ||= {:name => @blob.name, :data => @blob.data, :message => ""}
     end
 
     respond_with(@project)
@@ -45,24 +37,17 @@ class ProjectsController < ApplicationController
   end
 
   def update
-    case params[:content_type]
-    when "blob-update"
-      if @project.update_blob_attributes(params[:blob])
-        flash[:notice] = "Successfully updated file."
-        params[:path] = params[:path].split("/")[0..-2].join("/") + params[:blob][:name]
-      end
-    else
-      if @project.update_attributes(params[:project])
-        flash[:notice] = "Successfully updated project."
-      end
+    if @project.update_blob_attributes(params[:blob])
+      flash[:notice] = "Successfully updated file."
+      params[:path] = params[:path].split("/")[0..-2].join("/") + params[:blob][:name]
     end
     
     respond_with(@project, :location => @project.url_path("blob", params[:treeish], params[:path]))
   end
 
   def destroy
-    @project.destroy
-    flash[:notice] = "project successfully deleted."
+    @project.blob_destroy(params[:blob])
+    flash[:notice] = "File successfully deleted."
     respond_with(@project)
   end
 
@@ -81,21 +66,17 @@ class ProjectsController < ApplicationController
 
   private
 
+  def get_blob
+    @blob = @project.repo.tree(params[:treeish], params[:path]).contents[0]
+    params[:blob] ||= {:name => @blob.name, :data => @blob.data, :message => ""}
+  end
+
   def get_project
-    if params[:id].to_s != ""
-      @project = Project.find(params[:id])
-      params[:username] = @project.user.username
-      params[:projectname] = @project.name
-    elsif params[:username].to_s != "" and params[:projectname].to_s != ""
-      @project = Project.where(:users => {:username => params[:username]}, :name => params[:projectname]).includes(:user).first
-    end
+    @project = Project.where(:users => {:username => params[:username]}, :name => params[:projectname]).includes(:user).first
 
     params[:content_type] ||= "tree"
-    
     params[:treeish] ||= "master"
-    
     params[:path] ||= ""
-    
     params[:path] = params[:path].split("/")
   end
 end

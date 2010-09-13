@@ -32,6 +32,7 @@ $(document).ready(function() {
     if (navigator.userAgent.match(/(iPhone|iPod|iPad)/i) == null) {
       $('#blob_data').val(editor.value);
     }
+    $('#blob_form')._method = "put";
     $('#blob_form').submit();
     return false;
   });

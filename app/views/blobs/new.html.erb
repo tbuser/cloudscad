@@ -1,0 +1,13 @@
+<%= render :partial => "/projects/header" %>
+
+<div id="canvas_container"></div>
+
+<div class="action">
+  <%= button_to_function "Preview", "return false", :id => "blob_preview" %>
+</div>
+
+<%= form_tag @project.url_path("blob-create", params[:treeish], params[:path]), :method => :put, :id => "blob_form" do %>
+  <%= render :partial => "form" %>
+<% end %>
+
+<%= render :partial => "/projects/footer" %>

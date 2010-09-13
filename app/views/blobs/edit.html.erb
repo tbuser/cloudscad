@@ -1,3 +1,5 @@
+<%= render :partial => "/projects/header" %>
+
 <div id="canvas_container"></div>
 
 <div class="action">
@@ -5,5 +7,7 @@
 </div>
 
 <%= form_tag @project.url_path("blob-update", params[:treeish], params[:path]), :method => :put, :id => "blob_form" do %>
-  <%= render :partial => "blob_form" %>
+  <%= render :partial => "form" %>
 <% end %>
+
+<%= render :partial => "/projects/footer" %>
