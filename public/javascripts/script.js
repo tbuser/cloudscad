@@ -24,7 +24,7 @@ $(document).ready(function() {
 
   $('#blob_preview').click(function(e) {
     info.innerHTML = "Loading STL..."
-    $.get("/projects/preview", $.param({code:editor.value}), null, "script");  
+    $.post("/blobs/preview", $.param({code:editor.value}), null, "script");  
     return false;  
   });
   

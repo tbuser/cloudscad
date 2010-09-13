@@ -1,7 +1,7 @@
 class BlobsController < ApplicationController
   before_filter :require_user
   before_filter :get_project, :except => [:preview]
-  before_filter :get_blob, :ecpt => [:index, :new, :create, :preview]
+  before_filter :get_blob, :except => [:index, :new, :create, :preview]
 
   respond_to :html, :xml, :json
 
