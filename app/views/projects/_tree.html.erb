@@ -4,12 +4,12 @@
     <th>Updated</th>
     <th>Change Log</th>
   </tr>
-  <% project.repo.tree(treeish, path).contents.each do |content| -%>
-    <% commit = project.repo.log(treeish, File.join(path + [content.name]))[0] -%>
+  <% @project.repo.tree(params[:treeish], params[:path]).contents.each do |content| -%>
+    <% commit = @project.repo.log(params[:treeish], File.join(params[:path] + [content.name]))[0] -%>
     <tr>
-      <td>        
+      <td>
         <%= repo_icon(content) %>
-        <%= link_to(content.name, project.url_path(content_type_name(content), treeish, File.join(path + [content.name]))) %>
+        <%= link_to(content.name, @project.url_path(content_type_name(content), params[:treeish], (params[:path] + [content.name]))) %>
       </td>
       <td>
         <%= time_ago_in_words(commit.committed_date) %> ago

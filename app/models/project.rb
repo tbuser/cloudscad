@@ -24,6 +24,8 @@ class Project < ActiveRecord::Base
   end
   
   def url_path(content_type="", treeish="", path="")
+    path = File.join(path) if path.is_a?(Array)
+    
     unless path == ""
       content_type = "tree" if content_type == ""
       treeish = "master" if treeish == ""
@@ -35,6 +37,10 @@ class Project < ActiveRecord::Base
     end
     
     "/#{user.username}/#{name}/#{content_type}/#{treeish}/#{path}".gsub(/\/+/, '/')
+  end
+  
+  def update_blob_attributes(params)
+    
   end
   
   private

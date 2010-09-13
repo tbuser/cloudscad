@@ -69,7 +69,11 @@ Rails30::Application.routes.draw do
     end
   end
 
-  resources :projects
+  resources :projects do
+    collection do
+      get 'preview'
+    end
+  end
 
   match 'pages/:action' => 'pages'
 

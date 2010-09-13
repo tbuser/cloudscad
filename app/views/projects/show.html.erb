@@ -20,9 +20,11 @@
 <%=
 case params[:content_type]
 when "tree"
-  render :partial => "tree", :locals => {:project => @project, :treeish => params[:treeish], :path => params[:path]}
+  render :partial => "tree"
 when "blob"
   render :partial => "blob"
+when "blob-edit"
+  render :partial => "blob-edit"
 else
   raw('<p class="warning">Unknown Content Type</p>')
 end

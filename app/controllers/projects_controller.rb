@@ -1,6 +1,6 @@
 class ProjectsController < ApplicationController
   before_filter :require_user
-  before_filter :get_project, :except => [:index, :new, :create]
+  before_filter :get_project, :except => [:index, :new, :create, :preview]
 
   respond_to :html, :xml, :json
 
@@ -28,13 +28,16 @@ class ProjectsController < ApplicationController
     case params[:content_type]
     when "raw"
       render :text => @project.repo.tree(params[:treeish], params[:path]).contents[0].data
+      return
     when "blob"
       @blob = @project.repo.tree(params[:treeish], params[:path]).contents[0]
       @extension = File.extname(@blob.name)
-      respond_with(@project)
-    else
-      respond_with(@project)
+    when "blob-edit"
+      @blob = @project.repo.tree(params[:treeish], params[:path]).contents[0]
+      params[:blob] ||= {:name => @blob.name, :data => @blob.data, :message => ""}
     end
+
+    respond_with(@project)
   end
 
   def edit
@@ -42,17 +45,35 @@ class ProjectsController < ApplicationController
   end
 
   def update
-    if @project.update_attributes(params[:project])
-      flash[:notice] = "Successfully updated project."
+    case params[:content_type]
+    when "blob-update"
+      @project.update_blob_attributes(params[:blob])
+    else
+      if @project.update_attributes(params[:project])
+        flash[:notice] = "Successfully updated project."
+      end
     end
     
-    respond_with(@project, :location => @project.url_path)
+    respond_with(@project, :location => @project.url_path(params[:treeish], params[:path]))
   end
 
   def destroy
     @project.destroy
     flash[:notice] = "project successfully deleted."
     respond_with(@project)
+  end
+
+  def preview
+    @scad = Scad.new(:code => params[:code])
+    
+    params.delete("code")
+    
+    respond_to do |format|
+      format.scad   { render :text  => @scad.code               }
+      format.stl    { render :text  => @scad.to_stl(params)     }
+      format.json3d { render :text  => @scad.to_json3d(params)  }
+      format.js     { render :action => "show" }
+    end
   end
 
   private

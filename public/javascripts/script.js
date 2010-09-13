@@ -22,24 +22,24 @@ $(document).ready(function() {
     return false;  
   });
 
-  $('#script_preview').click(function(e) {
+  $('#blob_preview').click(function(e) {
     info.innerHTML = "Loading STL..."
-    $.get("/scripts/preview", $.param({code:editor.value}), null, "script");  
+    $.get("/projects/preview", $.param({code:editor.value}), null, "script");  
     return false;  
   });
   
-  $('#script_save').click(function(e){
+  $('#blob_save').click(function(e){
     if (navigator.userAgent.match(/(iPhone|iPod|iPad)/i) == null) {
-      $('#script_code').val(editor.value);
+      $('#blob_data').val(editor.value);
     }
-    $('#script_form').submit();
+    $('#blob_form').submit();
     return false;
   });
   
-  if ($('#script_code').length > 0) {
+  if ($('#blob_data').length > 0) {
     if (navigator.userAgent.match(/(iPhone|iPod|iPad)/i) == null) {
       window.onBespinLoad = function() {
-        bespin.useBespin("script_code").then(function(env) {
+        bespin.useBespin("blob_data").then(function(env) {
           editor = env.editor;
 
           editor.syntax = "js";

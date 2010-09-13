@@ -1,10 +1,10 @@
 class Scad
   attr_accessor :project, :code, :path
   
-  def initialize(project, code, path)
-    @project  = project
-    @code     = code
-    @path     = path
+  def initialize(options={})
+    @project  = options[:project]
+    @code     = options[:code]
+    @path     = options[:path]
   end
   
   def params
@@ -31,7 +31,7 @@ class Scad
   end
   
   def to_stl(params={})
-    Scad.scad_to_stl(@code, "script_#{id}", params)
+    Scad.scad_to_stl(@code, "script", params)
   end
   
   def to_json3d(params={})
