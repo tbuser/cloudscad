@@ -16,16 +16,16 @@ jQuery.fn.submitWithAjax = function () {
 var editor = null;
 
 $(document).ready(function() {
-  $('#custom_preview').click(function(e) {
+  $('#custom_scad_render_form').submit(function(e) {
     info.innerHTML = "Loading STL..."
-    $.get($(this).attr('action'), $('#custom_form').serialize(), null, "script");  
+    $.post($(this).attr('action'), $('#custom_scad_form :input:not([type=hidden])').serialize(), null, "script");  
     return false;  
   });
 
-  $('#blob_preview').click(function(e) {
+  $('#scad_render').click(function(e) {
     info.innerHTML = "Loading STL..."
-    $.post("/blobs/preview", $.param({code:editor.value}), null, "script");  
-    return false;  
+    $.post('/scad', $.param({code:editor.value}), null, "script");  
+    return false;
   });
   
   $('#blob_save').click(function(e){

@@ -67,11 +67,11 @@ Rails30::Application.routes.draw do
 
   match 'pages/:action' => 'pages'
 
+  post "scad" => 'blobs#scad'
+
   match ':username' => 'users#show'
 
   # match ':username/:projectname((/:content_type(/:treeish(/*path))))' => 'projects#show'
-
-  post "blobs/preview"
   
   scope ':username/:projectname' do
     get '((/:content_type(/:treeish(/*path))))' => 'trees#show', :constraints => {:content_type => /tree/}
@@ -82,6 +82,8 @@ Rails30::Application.routes.draw do
     post '((/:content_type(/:treeish(/*path))))' => 'blobs#create', :constraints => {:content_type => /blob-create/}
     put '((/:content_type(/:treeish(/*path))))' => 'projects#update', :constraints => {:content_type => /blob-update/}
     delete '((/:content_type(/:treeish(/*path))))' => 'projects#delete', :constraints => {:content_type => /blob-delete/}
+    
+    post '((/:content_type(/:treeish(/*path))))' => 'blobs#scad', :constraints => {:content_type => /scad/}
   end
 
   root :to => "projects#index"

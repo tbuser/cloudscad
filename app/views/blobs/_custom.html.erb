@@ -1,4 +1,5 @@
-<%= form_for url_for(:format => :stl), :html => {:method => :get, :id => "custom_form"} do |f| %>
+<%= form_tag @project.url_path("scad", params[:treeish], params[:path]), :method => :post, :id => "custom_scad_form" do %>
+  <%= hidden_field_tag "format", "stl" %>
   <% if scad.params.size == 0 -%>
     <p class="warning">No Parameters Found.</p>
   <% else -%>
@@ -13,7 +14,10 @@
       </p>
     <% end -%>
   <% end -%>
-  <%= f.submit "Download Custom STL" %>
+  <%= submit_tag "Download STL" %>
 <% end -%>
 
-<%= button_to "Preview Custom", url_for(:format => :js), :method => :get, :id => "custom_preview" %>
+<%= form_tag @project.url_path("scad", params[:treeish], params[:path]), :method => :post, :id => "custom_scad_render_form", :remote => true do %>
+  <%= hidden_field_tag "format", "js" %>
+  <%= submit_tag "Render" %>
+<% end -%>

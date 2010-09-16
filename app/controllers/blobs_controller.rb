@@ -1,7 +1,7 @@
 class BlobsController < ApplicationController
   before_filter :require_user
-  before_filter :get_project, :except => [:preview]
-  before_filter :get_blob, :except => [:index, :new, :create, :preview]
+  before_filter :get_project, :except => [:scad]
+  before_filter :get_blob, :except => [:index, :new, :create, :scad]
 
   respond_to :html, :xml, :json
 
@@ -21,6 +21,9 @@ class BlobsController < ApplicationController
 
   def show
     case params[:content_type]
+    # when "stl"
+    #   @scad = Scad.new(:project => @project, :treeish => params[:treeish], :path => params[:path])
+    #   render :text  => @scad.to_stl(params)
     when "download"
       render :text => @project.repo.tree(params[:treeish], params[:path]).contents[0].data
       return
@@ -51,16 +54,26 @@ class BlobsController < ApplicationController
     respond_with(@project)
   end
 
-  def preview
-    @scad = Scad.new(:code => params[:code])
+  def scad
+    @scad = Scad.new(params)
     
     params.delete("code")
+    params.delete("content_type")
+    params.delete("utf8")
+    params.delete("authenticity_token")
+    params.delete("commit")
+    
+    if params[:path]
+      @filename = params[:path].split("/")[-1]
+    else
+      @filename = "untitled.scad"
+    end
     
     respond_to do |format|
-      format.scad   { render :text  => @scad.code               }
-      format.stl    { render :text  => @scad.to_stl(params)     }
-      format.json3d { render :text  => @scad.to_json3d(params)  }
-      format.js     { render :action => "show" }
+      format.scad   { send_data @scad.code, :filename => @filename.gsub(/\..*$/, '.scad') }
+      format.stl    { send_data @scad.to_stl(params), :filename => @filename.gsub(/\..*$/, '.stl') }
+      format.json3d { send_data @scad.to_json3d(params), :filename => @filename.gsub(/\..*$/, '.json')  }
+      format.js
     end
   end
 

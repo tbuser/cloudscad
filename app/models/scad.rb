@@ -1,10 +1,21 @@
 class Scad
-  attr_accessor :project, :code, :path
+  attr_accessor :code, :username, :projectname, :treeish, :path
   
   def initialize(options={})
-    @project  = options[:project]
-    @code     = options[:code]
-    @path     = options[:path]
+    @username     = options[:username]
+    @projectname  = options[:projectname]
+    @treeish      = options[:treeish]
+    @path         = options[:path]
+    
+    if @username and @projectname
+      @project = Project.where(:users => {:username => @username}, :name => @projectname).includes(:user).first
+    end
+
+    if options[:code].to_s == ""
+      @code = @project.repo.tree(@treeish, @path).contents[0].data
+    else
+      @code = options[:code]
+    end
   end
   
   def params
