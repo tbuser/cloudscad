@@ -63,28 +63,51 @@ Rails30::Application.routes.draw do
 
   resources :users
 
+  resources :scripts
+
   resources :projects
 
   match 'pages/:action' => 'pages'
 
   post "scad" => 'blobs#scad'
 
+  # ignore weird requests from Bespin
+  match '*dot_clear.gif', :to => proc {|env| [200, {}, [""]] }
+
   match ':username' => 'users#show'
 
-  # match ':username/:projectname((/:content_type(/:treeish(/*path))))' => 'projects#show'
-  
+  # TODO: has to be a better way to do this, maybe a rack application?
   scope ':username/:projectname' do
     get '((/:content_type(/:treeish(/*path))))' => 'trees#show', :constraints => {:content_type => /tree/}
-
+  
     get '((/:content_type(/:treeish(/*path))))' => 'blobs#show', :constraints => {:content_type => /blob|download/}
     get '((/:content_type(/:treeish(/*path))))' => 'blobs#new', :constraints => {:content_type => /blob-new/}
     get '((/:content_type(/:treeish(/*path))))' => 'blobs#edit', :constraints => {:content_type => /blob-edit/}
-    post '((/:content_type(/:treeish(/*path))))' => 'blobs#create', :constraints => {:content_type => /blob-create/}
-    put '((/:content_type(/:treeish(/*path))))' => 'projects#update', :constraints => {:content_type => /blob-update/}
-    delete '((/:content_type(/:treeish(/*path))))' => 'projects#delete', :constraints => {:content_type => /blob-delete/}
+    post '((/:content_type(/:treeish(/*path))))' => 'blobs#create', :constraints => {:content_type => /blob/}
+    put '((/:content_type(/:treeish(/*path))))' => 'blobs#update', :constraints => {:content_type => /blob/}
+    delete '((/:content_type(/:treeish(/*path))))' => 'blobs#delete', :constraints => {:content_type => /blob/}
     
     post '((/:content_type(/:treeish(/*path))))' => 'blobs#scad', :constraints => {:content_type => /scad/}
   end
+
+  # match ':username/:projectname((/blob(/:treeish(/*path))))' do
+  #   get 'blobs#show'
+  # end
+
+  # scope ':username/:projectname' do
+  #   scope '((/:content_type(/:treeish(/*path))))' do
+  #     get :controller => 'trees#show', :constraints => {:content_type => /tree/}
+  # 
+  #     get :controller => 'blobs#show', :constraints => {:content_type => /blob|download/}
+  #     get :controller => 'blobs#new', :constraints => {:content_type => /blob-new/}
+  #     get :controller => 'blobs#edit', :constraints => {:content_type => /blob-edit/}
+  #     post :controller => 'blobs#create', :constraints => {:content_type => /blob/}
+  #     put :controller => 'blobs#update', :constraints => {:content_type => /blob/}
+  #     delete :controller => 'blobs#delete', :constraints => {:content_type => /blob/}
+  # 
+  #     post :controller => 'blobs#scad', :constraints => {:content_type => /scad/}
+  #   end
+  # end
 
   root :to => "projects#index"
 end

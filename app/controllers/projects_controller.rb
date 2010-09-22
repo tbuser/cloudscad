@@ -21,21 +21,21 @@ class ProjectsController < ApplicationController
       flash[:notice] = "Successfully created project."
     end
     
-    respond_with(@project, :location => @project.url_path("blob", params[:treeish], params[:path]))
+    respond_with(@project, :location => @project.url_path("tree", params[:treeish], params[:path]))
   end
 
   def show
-    case params[:content_type]
-    when "download"
-      render :text => @project.repo.tree(params[:treeish], params[:path]).contents[0].data
-      return
-    when "blob"
-      @blob = @project.repo.tree(params[:treeish], params[:path]).contents[0]
-      @extension = File.extname(@blob.name)
-    when "blob-edit"
-      @blob = @project.repo.tree(params[:treeish], params[:path]).contents[0]
-      params[:blob] ||= {:name => @blob.name, :data => @blob.data, :message => ""}
-    end
+    # case params[:content_type]
+    # when "download"
+    #   render :text => @project.repo.tree(params[:treeish], params[:path]).contents[0].data
+    #   return
+    # when "blob"
+    #   @blob = @project.repo.tree(params[:treeish], params[:path]).contents[0]
+    #   @extension = File.extname(@blob.name)
+    # when "blob-edit"
+    #   @blob = @project.repo.tree(params[:treeish], params[:path]).contents[0]
+    #   params[:blob] ||= {:name => @blob.name, :data => @blob.data, :message => ""}
+    # end
 
     respond_with(@project)
   end
@@ -45,19 +45,19 @@ class ProjectsController < ApplicationController
   end
 
   def update
-    case params[:content_type]
-    when "blob-update"
-      if @project.update_blob_attributes(params[:blob])
-        flash[:notice] = "Successfully updated file."
-        params[:path] = params[:path].split("/")[0..-2].join("/") + params[:blob][:name]
-      end
-    else
+    # case params[:content_type]
+    # when "blob-update"
+    #   if @project.update_blob_attributes(params[:blob])
+    #     flash[:notice] = "Successfully updated file."
+    #     params[:path] = params[:path].split("/")[0..-2].join("/") + params[:blob][:name]
+    #   end
+    # else
       if @project.update_attributes(params[:project])
         flash[:notice] = "Successfully updated project."
       end
-    end
+    # end
     
-    respond_with(@project, :location => @project.url_path("blob", params[:treeish], params[:path]))
+    respond_with(@project, :location => @project.url_path("tree", params[:treeish], params[:path]))
   end
 
   def destroy
@@ -66,18 +66,18 @@ class ProjectsController < ApplicationController
     respond_with(@project)
   end
 
-  def preview
-    @scad = Scad.new(:code => params[:code])
-    
-    params.delete("code")
-    
-    respond_to do |format|
-      format.scad   { render :text  => @scad.code               }
-      format.stl    { render :text  => @scad.to_stl(params)     }
-      format.json3d { render :text  => @scad.to_json3d(params)  }
-      format.js     { render :action => "show" }
-    end
-  end
+  # def preview
+  #   @scad = Scad.new(:code => params[:code])
+  #   
+  #   params.delete("code")
+  #   
+  #   respond_to do |format|
+  #     format.scad   { render :text  => @scad.code               }
+  #     format.stl    { render :text  => @scad.to_stl(params)     }
+  #     format.json3d { render :text  => @scad.to_json3d(params)  }
+  #     format.js     { render :action => "show" }
+  #   end
+  # end
 
   private
 

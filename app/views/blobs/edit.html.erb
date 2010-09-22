@@ -6,7 +6,7 @@
   <%= button_to_function "Render", "return false", :id => "scad_render" %>
 </div>
 
-<%= form_tag @project.url_path("blob-update", params[:treeish], params[:path]), :method => :put, :id => "blob_form" do %>
+<%= form_tag @project.url_path("blob", params[:treeish], params[:path]), :method => :put, :id => "blob_form" do %>
   <%= render :partial => "form" %>
 <% end %>
 

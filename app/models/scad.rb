@@ -1,5 +1,5 @@
 class Scad
-  attr_accessor :code, :username, :projectname, :treeish, :path
+  attr_accessor :code, :username, :projectname, :treeish, :path, :project
   
   def initialize(options={})
     @username     = options[:username]
@@ -39,10 +39,6 @@ class Scad
     end
 
     params
-  end
-  
-  def to_stl(params={})
-    Scad.scad_to_stl(@code, "script", params)
   end
   
   def to_json3d(params={})
@@ -93,27 +89,42 @@ class Scad
   end
 
   # TODO: cache results?!
-  def self.scad_to_stl(scad_data, name, params={})    
-    # save code to tmp dir
-    scad_file = Tempfile.new(name, "#{Rails.root}/tmp")
-    scad_file.print(scad_data)
-    scad_file.flush
+  def to_stl(params={})
+    stl_data = ""
+    name = "script"
 
-    # create a temporary stl file
-    stl_file = Tempfile.new(name, "#{Rails.root}/tmp")
-    stl_file.print("")
-    stl_file.flush
+    if @project
+      working_dir = File.join(@project.path)
+    else
+      working_dir = File.join(Rails.root, "tmp")
+    end
+
+    Dir.chdir(working_dir) do    
+      if @code
+        # save code to tmp dir
+        scad_file = Tempfile.new(name, working_dir)
+        scad_file.print(@code)
+        scad_file.flush
+
+        # create a temporary stl file
+        stl_file = Tempfile.new(name, working_dir)
+        stl_file.print("")
+        stl_file.flush
+      end
     
-    # shell out to openscad
-    cmd = Scad.openscad_command(scad_file.path, stl_file.path, params)
-    `#{cmd}`
+      # shell out to openscad
+      cmd = Scad.openscad_command(scad_file.path, stl_file.path, params)
+      `#{cmd}`
+    
+      # read contents of stl file
+      stl_data = stl_file.read
 
-    # read contents of stl file
-    stl_data = stl_file.read
-
-    # delete temp files
-    scad_file.unlink
-    stl_file.unlink
+      if @code
+        # delete temp files
+        scad_file.unlink
+        stl_file.unlink
+      end
+    end
     
     # return stl data
     stl_data

@@ -67,11 +67,11 @@ class Project < ActiveRecord::Base
     FileUtils.mkdir_p(path)
 
     Dir.chdir(path) do
-      # r = `git init .`
-      r = repo.git.init({}, ".")
+      r = `git init .`
+      # r = repo.git.init({}, ".")
       raise "Failed to initialize project: #{r}" unless r.include?("Initialized empty Git repository in #{path}/.git/")
       File.open("#{name.downcase}.scad", 'w') do |f|
-        f.write('// Size of cube\nsize = 20;\n\ntranslate([0, 0, size/2]) cube([size,size,size], center=true);')
+        f.write("// Size of cube\nsize = 20;\n\ntranslate([0, 0, size/2]) cube([size,size,size], center=true);")
       end
       repo.add("#{name.downcase}.scad")
       raise "Failed to add project script" unless repo.commit_all("new project")

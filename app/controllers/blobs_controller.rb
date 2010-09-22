@@ -25,10 +25,10 @@ class BlobsController < ApplicationController
     #   @scad = Scad.new(:project => @project, :treeish => params[:treeish], :path => params[:path])
     #   render :text  => @scad.to_stl(params)
     when "download"
-      render :text => @project.repo.tree(params[:treeish], params[:path]).contents[0].data
+      send_data @blob.data, :type => @blob.mime_type
       return
     when "blob"
-      @blob = @project.repo.tree(params[:treeish], params[:path]).contents[0]
+      # @blob = @project.repo.tree(params[:treeish], params[:path]).contents[0]
       @extension = File.extname(@blob.name)
     end
 
@@ -62,7 +62,7 @@ class BlobsController < ApplicationController
     params.delete("utf8")
     params.delete("authenticity_token")
     params.delete("commit")
-    
+
     if params[:path]
       @filename = params[:path].split("/")[-1]
     else
