@@ -1,3 +1,5 @@
+<%= render "shared/error_messages", :target => @project %>
+
 <%= hidden_field_tag "blob[treeish]", params[:treeish] %>
 <%= hidden_field_tag "blob[path]", params[:path].split("/") %>
 

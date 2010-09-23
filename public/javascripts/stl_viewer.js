@@ -11,6 +11,7 @@ window.onresize = function () {
   if (renderer) {
     renderer.setSize(canvasWidth, 300);
     camera.projectionMatrix = THREE.Matrix4.makePerspective(70, canvasWidth/ canvasHeight, 1, 10000);
+    sceneLoop();
   }
 }
 

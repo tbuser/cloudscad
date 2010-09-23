@@ -59,6 +59,8 @@ class Project < ActiveRecord::Base
         f.write(params[:data])
       end
     
+      # FIXME: needs better error reporting!
+      params[:message] = "..." if params[:message].to_s == ""
       if repo.commit_all(params[:message]) == ""
         errors.add_to_base("Failed To Commit Changes")
         return false
