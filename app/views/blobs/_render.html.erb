@@ -1,3 +1,22 @@
+<p>
+<%= button_to_function "Top", "camera_view('top')" %>
+<%= button_to_function "Side", "camera_view('side')" %>
+<%= button_to_function "Bottom", "camera_view('bottom')" %>
+<%= button_to_function "Diagonal", "camera_view('diagonal')" %>
+
+<%= button_to_function "Zoom +", "camera_zoom(5)" %>
+<%= button_to_function "Zoom -", "camera_zoom(-5)" %>
+
+<%= button_to_function "Toggle Rotation", "toggleRotate();" %>
+</p>
+
 <div id="canvas_container"></div>
+
+<p>
+<%= button_to_function "Wireframe", "stl_material('wireframe')" %>
+<%= button_to_function "Solid", "stl_material('solid')" %>
+</p>
+
 <div id="openscad_output"></div>
+
 <div id="render_spinner"><%= image_tag "spinner.gif" %> Processing...</div>

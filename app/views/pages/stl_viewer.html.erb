@@ -4,9 +4,13 @@
   This is an STL to three.js model viewer done totally in javascript.
 </p>
 
-<%= render :partial => "/blobs/render" %>
+<p>
+  <%= render :partial => "/blobs/render" %>
+</p>
 
-<%= button_to_function "Render", "load_stl_string(document.getElementById('stl_data').value);" %><br/>
+<p>
+  <%= button_to_function "Render", "load_stl_string(document.getElementById('stl_data').value);" %>
+</p>
 
 <p>
   <%= label_tag "stl_data", "ASCII STL Data" %>

@@ -6,7 +6,6 @@ class User < ActiveRecord::Base
   validates_uniqueness_of :username, :email
   validate :cannot_change_username, :on => :update
   
-  has_many :scripts
   has_many :projects
   
   after_create :create_path

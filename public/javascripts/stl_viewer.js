@@ -1,5 +1,18 @@
-var canvasWidth = 800;
-var canvasHeight = 350;
+// var canvasWidth = 800;
+// var canvasHeight = 350;
+
+var canvasWidth = parseFloat(document.defaultView.getComputedStyle(document.getElementById('main'),null).getPropertyValue('width'));
+var canvasHeight = 300;
+
+window.onresize = function () {
+  var canvasWidth = parseFloat(document.defaultView.getComputedStyle(document.getElementById('main'),null).getPropertyValue('width'));
+  var canvasHeight = 300;
+
+  if (renderer) {
+    renderer.setSize(canvasWidth, 300);
+    camera.projectionMatrix = THREE.Matrix4.makePerspective(70, canvasWidth/ canvasHeight, 1, 10000);
+  }
+}
 
 var container;
 var stats;
@@ -22,13 +35,17 @@ var windowHalfY = window.innerHeight / 2;
 var view;
 var info;
 
+var timer;
+var rotateTimer;
+
 if (typeof(stl_string) == "undefined") {
   stl_string = "";
 }
 
 if (document.getElementById('canvas_container') != null) {
   initScene("canvas_container");
-  setInterval(sceneLoop, 1000/60);
+  sceneLoop();
+  // timer = setInterval(sceneLoop, 1000/60);
 }
 
 function initScene(containerId) {
@@ -44,70 +61,6 @@ function initScene(containerId) {
 	info.style.textAlign = 'center';
 	info.innerHTML = 'Loading STL...';
 	container.appendChild(info);
-
-  top_button = document.createElement('button');
-  top_button.style.position = 'absolute';
-  top_button.style.top = '10px';
-  top_button.style.right = '10px';
-  top_button.innerHTML = 'Top View';
-  top_button.onclick = function(e){camera_view("top");};
-  container.appendChild(top_button);
-
-  side_button = document.createElement('button');
-  side_button.style.position = 'absolute';
-  side_button.style.top = '30px';
-  side_button.style.right = '10px';
-  side_button.innerHTML = 'Side View';
-  side_button.onclick = function(e){camera_view("side");};
-  container.appendChild(side_button);
-
-  bottom_button = document.createElement('button');
-  bottom_button.style.position = 'absolute';
-  bottom_button.style.top = '50px';
-  bottom_button.style.right = '10px';
-  bottom_button.innerHTML = 'Bottom View';
-  bottom_button.onclick = function(e){camera_view("bottom");};
-  container.appendChild(bottom_button);
-
-  diagonal_button = document.createElement('button');
-  diagonal_button.style.position = 'absolute';
-  diagonal_button.style.top = '70px';
-  diagonal_button.style.right = '10px';
-  diagonal_button.innerHTML = 'Diagonal View';
-  diagonal_button.onclick = function(e){camera_view("diagonal");};
-  container.appendChild(diagonal_button);
-
-  zoom_in_button = document.createElement('button');
-  zoom_in_button.style.position = 'absolute';
-  zoom_in_button.style.top = '50px';
-  // zoom_in_button.style.right = '10px';
-  zoom_in_button.innerHTML = 'Zoom +';
-  zoom_in_button.onclick = function(e){camera_zoom(5);};
-  container.appendChild(zoom_in_button);
-
-  zoom_out_button = document.createElement('button');
-  zoom_out_button.style.position = 'absolute';
-  zoom_out_button.style.top = '70px';
-  // zoom_out_button.style.right = '10px';
-  zoom_out_button.innerHTML = 'Zoom -';
-  zoom_out_button.onclick = function(e){camera_zoom(-5);};
-  container.appendChild(zoom_out_button);
-
-  wireframe_button = document.createElement('button');
-  wireframe_button.style.position = 'absolute';
-  wireframe_button.style.top = '90px';
-  // wireframe_button.style.right = '10px';
-  wireframe_button.innerHTML = 'Wireframe';
-  wireframe_button.onclick = function(e){stl_material("wireframe");};
-  container.appendChild(wireframe_button);
-
-  solid_button = document.createElement('button');
-  solid_button.style.position = 'absolute';
-  solid_button.style.top = '110px';
-  // solid_button.style.right = '10px';
-  solid_button.innerHTML = 'Solid';
-  solid_button.onclick = function(e){stl_material("solid");};
-  container.appendChild(solid_button);
 
 	camera = new THREE.Camera( 70, canvasWidth / canvasHeight, 1, 10000 );
 	scene = new THREE.Scene();
@@ -136,9 +89,14 @@ function initScene(containerId) {
 	stats.domElement.style.top = '0px';
 	container.appendChild(stats.domElement);
 
+  renderer.domElement.addEventListener('mouseover', onDocumentMouseOver, false);
+  renderer.domElement.addEventListener('mouseout', onDocumentMouseOut, false);
 	renderer.domElement.addEventListener('mousedown', onDocumentMouseDown, false);
+
 	renderer.domElement.addEventListener('touchstart', onDocumentTouchStart, false);
+	renderer.domElement.addEventListener('touchend', onDocumentTouchEnd, false);
 	renderer.domElement.addEventListener('touchmove', onDocumentTouchMove, false);
+	
   renderer.domElement.addEventListener('DOMMouseScroll', onDocumentScroll, false);
 	renderer.domElement.addEventListener('mousewheel', onDocumentScroll, false);
 	renderer.domElement.addEventListener('gesturechange', onDocumentGestureChange, false);      	
@@ -178,8 +136,19 @@ function onDocumentGestureChange(event) {
   }
 }
 
-function onDocumentMouseDown( event ) {
+function onDocumentMouseOver(event) {
+  targetRotation = stl.rotation.z;
+  
+  timer = setInterval(sceneLoop, 1000/60);
+  // renderer.domElement.addEventListener('mouseout', onDocumentMouseOut, false);
+}
 
+// function onDocumentMouseOut(event) {
+//   clearInterval(timer);
+//   timer = nil;
+// }
+
+function onDocumentMouseDown( event ) {
 	event.preventDefault();
 
 	document.addEventListener('mousemove', onDocumentMouseMove, false);
@@ -198,55 +167,74 @@ function onDocumentMouseMove( event ) {
 }
 
 function onDocumentMouseUp( event ) {
-
 	document.removeEventListener('mousemove', onDocumentMouseMove, false);
 	document.removeEventListener('mouseup', onDocumentMouseUp, false);
 	document.removeEventListener('mouseout', onDocumentMouseOut, false);
 }
 
 function onDocumentMouseOut( event ) {
-
+  clearInterval(timer);
+  timer = null;
+  targetRotation = stl.rotation.z;
+  
 	document.removeEventListener('mousemove', onDocumentMouseMove, false);
 	document.removeEventListener('mouseup', onDocumentMouseUp, false);
 	document.removeEventListener('mouseout', onDocumentMouseOut, false);
 }
 
 function onDocumentTouchStart( event ) {
-
-	if(event.touches.length == 1) {
-
+  targetRotation = stl.rotation.z;
+  
+  timer = setInterval(sceneLoop, 1000/60);
+  
+	if (event.touches.length == 1) {
 		event.preventDefault();
 
 		mouseXOnMouseDown = event.touches[0].pageX - windowHalfX;
 		targetRotationOnMouseDown = targetRotation;
-
 	}
 }
 
+function onDocumentTouchEnd(event) {
+  clearInterval(timer);
+  timer = null;
+  targetRotation = stl.rotation.z;
+}
+
 function onDocumentTouchMove( event ) {
-
-	if(event.touches.length == 1) {
-
+	if (event.touches.length == 1) {
 		event.preventDefault();
 
 		mouseX = event.touches[0].pageX - windowHalfX;
 		targetRotation = targetRotationOnMouseDown + (mouseX - mouseXOnMouseDown) * 0.05;
-
 	}
 }
 
-//
-
 function sceneLoop() {
+  if (stats) {
+    if (view == "bottom") {
+      plane.rotation.z = stl.rotation.z -= (targetRotation + stl.rotation.z) * 0.05;
+    } else {
+      plane.rotation.z = stl.rotation.z += (targetRotation - stl.rotation.z) * 0.05;
+    }
 
-  if (view == "bottom") {
-    plane.rotation.z = stl.rotation.z -= (targetRotation + stl.rotation.z) * 0.05;
-  } else {
-    plane.rotation.z = stl.rotation.z += (targetRotation - stl.rotation.z) * 0.05;
+  	renderer.render(scene, camera);
+  	stats.update();
   }
+}
 
-	renderer.render(scene, camera);
-	stats.update();
+function rotateLoop() {
+  targetRotation += 0.01;
+  sceneLoop();
+}
+
+function toggleRotate() {
+  if (rotateTimer == null) {
+    rotateTimer = setInterval(rotateLoop, 1000/60);
+  } else {
+    clearInterval(rotateTimer);
+    rotateTimer = null;
+  }
 }
 
 function camera_view(dir) {
@@ -271,7 +259,9 @@ function camera_view(dir) {
     camera.position.z = 100;
   }
   targetRotation = 0;
-  plane.rotation.z = stl.rotation.z = 0;        
+  plane.rotation.z = stl.rotation.z = 0;
+  
+  sceneLoop();
 }
 
 function camera_zoom(factor) {
@@ -285,6 +275,8 @@ function camera_zoom(factor) {
     camera.position.y += factor;
     camera.position.z -= factor;
   }
+  
+  sceneLoop();
 }
 
 function stl_material(type) {
@@ -296,6 +288,8 @@ function stl_material(type) {
     stl = new THREE.Mesh(geometry, new THREE.MeshFaceColorFillMaterial() );
 		scene.addObject(stl);
   }
+  
+  sceneLoop();
 }
 
 function load_stl_string(stl_string) {
@@ -319,5 +313,7 @@ function load_stl_string(stl_string) {
   // stl.overdraw = true;
 	scene.addObject(stl);
 
-  info.innerHTML = 'Finished Loading ' + geometry.faces.length + ' faces';	
+  info.innerHTML = 'Finished Loading ' + geometry.faces.length + ' faces';
+  
+  sceneLoop();
 }

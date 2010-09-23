@@ -63,8 +63,6 @@ Rails30::Application.routes.draw do
 
   resources :users
 
-  resources :scripts
-
   resources :projects
 
   match 'pages/:action' => 'pages'
