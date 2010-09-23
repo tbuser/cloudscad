@@ -3,7 +3,7 @@
 
   <div class="field">
     <%= f.label :username %><br />
-    <% if params[:action] == "new" -%>
+    <% if @user.new_record? -%>
       <%= f.text_field :username %>
     <% else -%>
       <%= @user.username %>

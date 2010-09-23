@@ -9,6 +9,7 @@ class Project < ActiveRecord::Base
   belongs_to :user
   
   after_create :create_repo
+  after_destroy :delete_repo
   
   def name=(str)
     self[:name] = str.to_s.downcase.gsub(" ", "_")
@@ -87,5 +88,10 @@ class Project < ActiveRecord::Base
       raise "Failed to add project script" unless repo.commit_all("new project")
     end
   end  
+
+  def delete_repo
+    # FIXME: SCARY, but what else can I do?
+    FileUtils.rm_rf(path)
+  end
   
 end

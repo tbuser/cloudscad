@@ -1,7 +1,7 @@
 <% title @project.name.titleize %>
 
 <% if @project.user == current_user -%>
-  <%= link_to "Edit", edit_project_path(@project) %> | <%= link_to "Delete", project_path(@project), :method => :destroy, :confirm => "Are you sure you want to delete the whole project?" %>
+  <%= link_to "Edit", edit_project_path(@project) %> | <%= link_to "Delete", project_path(@project), :method => :delete, :confirm => "Are you sure you want to delete the whole project?" %>
 <% end -%>  
 
 <%= simple_format(@project.description) %>

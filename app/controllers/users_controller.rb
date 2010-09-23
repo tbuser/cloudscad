@@ -2,7 +2,9 @@ class UsersController < ApplicationController
   before_filter :require_no_user, :only => [:new, :create]
   before_filter :require_user, :only => [:show, :edit, :update]
 
-  before_filter :get_user, :except => [:new, :create, :show]
+  before_filter :get_user, :except => [:new, :create]
+
+  before_filter :check_user_permissions, :except => [:index, :show, :new, :create]
   
   def new
     @user = User.new
@@ -27,15 +29,12 @@ class UsersController < ApplicationController
   end
   
   def show
-    if params[:id].to_s != ""
-      @user = User.find(params[:id])
-    elsif params[:username].to_s != ""
-      @user = User.where(:username => params[:username]).first
-    end    
-
     if @user.nil?
+      # FIXME: pages shortcut fallthrough?
       redirect_to "/pages/#{params[:username]}"
     else
+      @projects = @user.projects.paginate :page => params["page"], :order => "created_at DESC"
+
       respond_to do |format|
         format.html
         format.xml { render :xml => @user.to_xml(:except => [:crypted_password, :password_salt, :persistence_token]) }
@@ -62,6 +61,14 @@ class UsersController < ApplicationController
   private
   
   def get_user
-    @user = current_user
+    if params[:id].to_s != ""
+      @user = User.find(params[:id])
+    elsif params[:username].to_s != ""
+      @user = User.where(:username => params[:username]).first
+    end    
+  end
+  
+  def check_user_permissions
+    permission_denied unless @user == current_user
   end
 end

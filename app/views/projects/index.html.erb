@@ -1,6 +1,6 @@
 <% title "Projects" %>
 
-<% for project in @projects %>
+<% @projects.each do |project| %>
   <p class="project">
       <strong><%= link_to project.user.username, project.user.url_path %> / <%= link_to project.name, project.url_path %></strong> <%= time_ago_in_words(project.created_at) %> ago
   </p>

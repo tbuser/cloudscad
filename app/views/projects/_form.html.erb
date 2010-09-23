@@ -3,7 +3,7 @@
 
   <div class="field">
     <%= f.label :name %><br />
-    <% if params[:action] == "new" -%>
+    <% if @project.new_record? -%>
       <%= f.text_field :name %>
     <% else -%>
       <%= @project.name.titleize %>
