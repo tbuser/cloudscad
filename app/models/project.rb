@@ -1,7 +1,10 @@
 class Project < ActiveRecord::Base
+  attr_accessible :name, :description
+  
   validates_presence_of :user_id, :name
   validates_uniqueness_of :name, :scope => :user_id, :case_sensitive => false
   validates_format_of :name, :with => /\A([a-z0-9_.-]+)\Z/i
+  validate :cannot_change_name, :on => :update
   
   belongs_to :user
   
@@ -39,6 +42,7 @@ class Project < ActiveRecord::Base
     "/#{user.username}/#{name}/#{content_type}/#{treeish}/#{path}".gsub(/\/+/, '/')
   end
   
+  # TODO: move to a seperate blob model...
   def update_blob_attributes(params)
     Dir.chdir(path) do
       current_name = params[:path].split("/")[-1]
@@ -63,6 +67,12 @@ class Project < ActiveRecord::Base
   
   private
   
+  def cannot_change_name
+    if name_changed?
+      errors.add(:name, "cannot be changed")
+    end
+  end
+  
   def create_repo
     FileUtils.mkdir_p(path)
 
@@ -76,5 +86,6 @@ class Project < ActiveRecord::Base
       repo.add("#{name.downcase}.scad")
       raise "Failed to add project script" unless repo.commit_all("new project")
     end
-  end
+  end  
+  
 end

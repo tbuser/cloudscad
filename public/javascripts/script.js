@@ -1,7 +1,3 @@
-/* Author: Tony Buser
-
-*/
-
 jQuery.ajaxSetup({  
   'beforeSend': function (xhr) {xhr.setRequestHeader("Accept", "text/javascript")}  
 });
@@ -17,13 +13,15 @@ var editor = null;
 
 $(document).ready(function() {
   $('#custom_scad_render_form').submit(function(e) {
-    info.innerHTML = "Loading STL..."
+    $('#render_spinner').show();
+    info.innerHTML = "Loading STL.  Please Wait..."
     $.post($(this).attr('action'), $('#custom_scad_form :input:not([type=hidden])').serialize(), null, "script");  
     return false;  
   });
 
   $('#scad_render').click(function(e) {
-    info.innerHTML = "Loading STL..."
+    $('#render_spinner').show();
+    info.innerHTML = "Loading STL.  Please Wait..."
     $.post('/scad', $.param({code:editor.value}), null, "script");  
     return false;
   });

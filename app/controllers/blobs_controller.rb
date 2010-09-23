@@ -2,7 +2,7 @@ class BlobsController < ApplicationController
   before_filter :require_user
   before_filter :get_project, :except => [:scad]
   before_filter :get_blob, :except => [:index, :new, :create, :scad]
-  before_filter :check_project_permissions, :except => [:index, :show]
+  before_filter :check_project_permissions, :except => [:index, :show, :scad]
 
   respond_to :html, :xml, :json
 
@@ -72,9 +72,9 @@ class BlobsController < ApplicationController
     
     respond_to do |format|
       format.scad   { send_data @scad.code, :filename => @filename.gsub(/\..*$/, '.scad') }
-      format.stl    { send_data @scad.to_stl(params), :filename => @filename.gsub(/\..*$/, '.stl') }
+      format.stl    { send_data @scad.to_stl(params)[:stl_data], :filename => @filename.gsub(/\..*$/, '.stl') }
       format.json3d { send_data @scad.to_json3d(params), :filename => @filename.gsub(/\..*$/, '.json')  }
-      format.js
+      format.js     { @stl_hash = @scad.to_stl(params) }
     end
   end
 

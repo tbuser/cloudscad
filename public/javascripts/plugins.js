@@ -1,6 +1,7 @@
 (function($){
 
 
+
 })(window.jQuery);
 
 window.log = function(){

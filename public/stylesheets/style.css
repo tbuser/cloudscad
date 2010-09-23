@@ -261,6 +261,18 @@ header, footer, div#main {
  list-style: disc;
 }
 
+#openscad_output {
+  color: red;
+  display: none;
+  margin-top: 10px;
+  margin-bottom: 10px;
+  font-family: monospace;
+}
+
+#render_spinner {
+  display: none;
+}
+
 /* CodeRay */
 
 .CodeRay {

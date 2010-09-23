@@ -84,14 +84,15 @@ class Scad
   end
 
   def to_obj_hash(params={})
-    stl_data = to_stl(params)
+    stl_data = to_stl(params)[:stl_data]
     Scad.parse_stl(stl_data)
   end
 
   # TODO: cache results?!
   def to_stl(params={})
-    stl_data = ""
-    name = "script"
+    stl_data        = ""
+    openscad_output = ""
+    name            = "script"
 
     if @project
       working_dir = File.join(@project.path)
@@ -114,7 +115,7 @@ class Scad
     
       # shell out to openscad
       cmd = Scad.openscad_command(scad_file.path, stl_file.path, params)
-      `#{cmd}`
+      openscad_output = `#{cmd}`
     
       # read contents of stl file
       stl_data = stl_file.read
@@ -127,7 +128,7 @@ class Scad
     end
     
     # return stl data
-    stl_data
+    {:openscad_output => openscad_output, :stl_data => stl_data}
   end
 
   def self.parse_stl(stl_data)
@@ -192,6 +193,6 @@ class Scad
     end
     args
 
-    "#{OPENSCAD_PATH} -s #{outpath} #{args} #{inpath}"
+    "#{OPENSCAD_PATH} -s #{outpath} #{args} #{inpath} 2>&1"
   end
 end

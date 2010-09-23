@@ -36,7 +36,7 @@ class ScriptsController < ApplicationController
       format.html
       format.xml    { render :xml   => @script                    }
       format.scad   { render :text  => @script.code               }
-      format.stl    { render :text  => @script.to_stl(params)     }
+      format.stl    { render :text  => @script.to_stl(params)[:stl_data]     }
       format.json3d { render :text  => @script.to_json3d(params)  }
       format.js
     end
@@ -75,7 +75,7 @@ class ScriptsController < ApplicationController
     
     respond_to do |format|
       format.scad   { render :text  => @script.code               }
-      format.stl    { render :text  => @script.to_stl(params)     }
+      format.stl    { render :text  => @script.to_stl(params)[:stl_data]     }
       format.json3d { render :text  => @script.to_json3d(params)  }
       format.js     { render :action => "show" }
     end

@@ -1,3 +1,8 @@
+<%= form_tag @project.url_path("scad", params[:treeish], params[:path]), :method => :post, :id => "custom_scad_render_form", :remote => true do %>
+  <%= hidden_field_tag "format", "js" %>
+  <%= submit_tag "Render" %>
+<% end -%>
+
 <%= form_tag @project.url_path("scad", params[:treeish], params[:path]), :method => :post, :id => "custom_scad_form" do %>
   <%= hidden_field_tag "format", "stl" %>
   <% if scad.params.size == 0 -%>
@@ -15,9 +20,4 @@
     <% end -%>
   <% end -%>
   <%= submit_tag "Download STL" %>
-<% end -%>
-
-<%= form_tag @project.url_path("scad", params[:treeish], params[:path]), :method => :post, :id => "custom_scad_render_form", :remote => true do %>
-  <%= hidden_field_tag "format", "js" %>
-  <%= submit_tag "Render" %>
 <% end -%>

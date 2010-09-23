@@ -1,7 +1,7 @@
 <%= render :partial => "/projects/header" %>
 
 <% if @extension == ".scad" -%>
-  <div id="canvas_container"></div>
+  <%= render :partial => "render" %>
 
   <%= render :partial => "custom", :locals => {:scad => Scad.new(:project => @project, :code => @blob.data, :path => params[:path])} %>
 <% end -%>

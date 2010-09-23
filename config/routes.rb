@@ -76,7 +76,7 @@ Rails30::Application.routes.draw do
 
   match ':username' => 'users#show'
 
-  # TODO: has to be a better way to do this, maybe a rack application?
+  # TODO: this complains about duplicates, there has to be a better way to do this, maybe a rack app to handle routing?
   scope ':username/:projectname' do
     get '((/:content_type(/:treeish(/*path))))' => 'trees#show', :constraints => {:content_type => /tree/}
   

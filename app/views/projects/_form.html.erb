@@ -1,9 +1,13 @@
 <%= form_for @project, :html => {:id => "project_form"} do |f| %>
   <%= render "shared/error_messages", :target => @project %>
-  
+
   <div class="field">
     <%= f.label :name %><br />
-    <%= f.text_field :name %>
+    <% if params[:action] == "new" -%>
+      <%= f.text_field :name %>
+    <% else -%>
+      <%= @project.name.titleize %>
+    <% end -%>
   </div>
 
   <div class="field">
