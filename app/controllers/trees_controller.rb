@@ -1,6 +1,7 @@
 class TreesController < ApplicationController
   before_filter :require_user
   before_filter :get_project, :except => [:index, :new, :create, :preview]
+  before_filter :check_project_permissions, :except => [:index, :show]
 
   respond_to :html, :xml, :json
 
@@ -45,8 +46,8 @@ class TreesController < ApplicationController
     @project = Project.where(:users => {:username => params[:username]}, :name => params[:projectname]).includes(:user).first
 
     params[:content_type] ||= "tree"
-    params[:treeish] ||= "master"
-    params[:path] ||= ""
-    params[:path] = params[:path].split("/")
+    params[:treeish]      ||= "master"
+    params[:path]         ||= ""
+    params[:path]         = params[:path].split("/")
   end
 end

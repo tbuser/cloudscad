@@ -2,6 +2,7 @@ class BlobsController < ApplicationController
   before_filter :require_user
   before_filter :get_project, :except => [:scad]
   before_filter :get_blob, :except => [:index, :new, :create, :scad]
+  before_filter :check_project_permissions, :except => [:index, :show]
 
   respond_to :html, :xml, :json
 
@@ -88,8 +89,8 @@ class BlobsController < ApplicationController
     @project = Project.where(:users => {:username => params[:username]}, :name => params[:projectname]).includes(:user).first
 
     params[:content_type] ||= "tree"
-    params[:treeish] ||= "master"
-    params[:path] ||= ""
-    params[:path] = params[:path].split("/")
+    params[:treeish]      ||= "master"
+    params[:path]         ||= ""
+    params[:path]         = params[:path].split("/")
   end
 end

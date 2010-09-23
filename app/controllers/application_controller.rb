@@ -48,4 +48,14 @@ class ApplicationController < ActionController::Base
     redirect_to(session[:return_to] || default)
     session[:return_to] = nil
   end
+  
+  def permission_denied(reason=nil)
+    flash[:error] = reason || "Permission Denied"
+    redirect_back_or_default root_url
+    return false
+  end
+
+  def check_project_permissions
+    permission_denied unless @project.user == current_user
+  end  
 end

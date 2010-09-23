@@ -1,6 +1,7 @@
 class ProjectsController < ApplicationController
   before_filter :require_user
-  before_filter :get_project, :except => [:index, :new, :create, :preview]
+  before_filter :get_project, :except => [:index, :new, :create]
+  before_filter :check_project_permissions, :except => [:index, :show, :new, :create]
 
   respond_to :html, :xml, :json
 
@@ -25,19 +26,9 @@ class ProjectsController < ApplicationController
   end
 
   def show
-    # case params[:content_type]
-    # when "download"
-    #   render :text => @project.repo.tree(params[:treeish], params[:path]).contents[0].data
-    #   return
-    # when "blob"
-    #   @blob = @project.repo.tree(params[:treeish], params[:path]).contents[0]
-    #   @extension = File.extname(@blob.name)
-    # when "blob-edit"
-    #   @blob = @project.repo.tree(params[:treeish], params[:path]).contents[0]
-    #   params[:blob] ||= {:name => @blob.name, :data => @blob.data, :message => ""}
-    # end
-
-    respond_with(@project)
+    respond_with(@project) do |format|
+      format.html { redirect_to @project.url_path("tree", params[:treeish], params[:path]) }
+    end
   end
 
   def edit
@@ -45,17 +36,9 @@ class ProjectsController < ApplicationController
   end
 
   def update
-    # case params[:content_type]
-    # when "blob-update"
-    #   if @project.update_blob_attributes(params[:blob])
-    #     flash[:notice] = "Successfully updated file."
-    #     params[:path] = params[:path].split("/")[0..-2].join("/") + params[:blob][:name]
-    #   end
-    # else
-      if @project.update_attributes(params[:project])
-        flash[:notice] = "Successfully updated project."
-      end
-    # end
+    if @project.update_attributes(params[:project])
+      flash[:notice] = "Successfully updated project."
+    end
     
     respond_with(@project, :location => @project.url_path("tree", params[:treeish], params[:path]))
   end
@@ -65,19 +48,6 @@ class ProjectsController < ApplicationController
     flash[:notice] = "project successfully deleted."
     respond_with(@project)
   end
-
-  # def preview
-  #   @scad = Scad.new(:code => params[:code])
-  #   
-  #   params.delete("code")
-  #   
-  #   respond_to do |format|
-  #     format.scad   { render :text  => @scad.code               }
-  #     format.stl    { render :text  => @scad.to_stl(params)     }
-  #     format.json3d { render :text  => @scad.to_json3d(params)  }
-  #     format.js     { render :action => "show" }
-  #   end
-  # end
 
   private
 
@@ -91,11 +61,8 @@ class ProjectsController < ApplicationController
     end
 
     params[:content_type] ||= "tree"
-    
-    params[:treeish] ||= "master"
-    
-    params[:path] ||= ""
-    
-    params[:path] = params[:path].split("/")
+    params[:treeish]      ||= "master"
+    params[:path]         ||= ""
+    params[:path]         = params[:path].split("/")
   end
 end
