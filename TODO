@@ -1,8 +1,11 @@
-* add caching!?
-
+* design a logo
+* needs UI work!
+* add caching of compiled STL!
+* needs more rails testing
+* need to figure out a better way to handle the git integration with rails (the routes are an ugly nightmare at the moment)
 * add STL file uploads
 * add DXF file uploads
-* add Projects - allow you to combine multiple Scripts/files together so that Scripts can include other files
+* allow you to combine multiple Scripts/files together so that Scripts can include other files (maybe git submodules?)
 * generate stl/dxf thumbnail images
 * add versioning to objects - diff/rollback/etc
 * modify openscad to optimize command line compiling - cache cgal data between compiles? long running process?
@@ -11,11 +14,9 @@
 * add openscad syntax completion to Bespin
 * add comments - DISQUS?
 * figure out how to get openscad modifiers to render in previews - ie. # to make transparent subtrees
-
-* design a logo
-
 * @clothbot suggested URL includes - so that a script can include a file hosted somewhere else, might make for interesting mashups
-
 * add skeinforge or some sort of slicing system - maybe superskein will be ready by then
-
 * setup gitolite for read/write git access - cron job to periodically update gitolite config from database?
+* add publish to thingiverse
+* add support for submitting print job requests to other sites like CloudFAB and Shapeways
+* add REST API to everything!
