@@ -11,7 +11,7 @@ set :deploy_to, "/home/www/www.cloudscad.com"
 
 default_run_options[:pty] = true
 set :user, "cloudscad"
-set :password, "m0by!"
+set :password, "ichangedthis:P"
 set :ssh_options, { :forward_agent => true }
 
 role :web, "174.143.174.217"                          # Your HTTP server, Apache/etc
