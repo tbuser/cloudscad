@@ -53,7 +53,7 @@ class UserTest < ActiveSupport::TestCase
   end
   
   test "path" do
-    assert_equal @new_user.path, File.join(REPO_ROOT, "tbuser")
+    assert_equal @new_user.path, File.join(REPO_ROOT, "foo")
   end
   
   test "url" do

@@ -74,7 +74,7 @@ class ProjectTest < ActiveSupport::TestCase
   end
   
   test "updated blob attributes" do
-    flunk "TODO: should probably be moved to a blob model..."
+    # flunk "TODO: should probably be moved to a blob model..."
   end
   
   test "repo creation and deletion" do

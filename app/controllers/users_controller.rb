@@ -1,6 +1,6 @@
 class UsersController < ApplicationController
   before_filter :require_no_user, :only => [:new, :create]
-  before_filter :require_user, :only => [:show, :edit, :update]
+  before_filter :require_user, :only => [:edit, :update]
 
   before_filter :get_user, :except => [:new, :create]
 
@@ -11,7 +11,8 @@ class UsersController < ApplicationController
   end
   
   def create
-    if ['teaearlgreyhot','iwillhiretony'].include?(params[:invitation_code])
+    # Everyone will now know the invite code OH NOES!  Please be gentle on the poor test server...
+    if ['teaearlgreyhot'].include?(params[:invitation_code])
       ok = true
     else
       ok = false
