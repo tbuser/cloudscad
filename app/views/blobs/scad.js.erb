@@ -6,6 +6,6 @@ var stl_string = "<%= @stl_hash[:stl_data].gsub(/\n/, '\\n') %>";
   $('#openscad_output').slideUp().html("<%= @stl_hash[:openscad_output].gsub(/\n/, '\\n').gsub('"', '\"') %>").slideDown();
 <% end -%>
 
-load_stl_string(stl_string);
+thingiview.loadSTLString(stl_string);
 
 $('#render_spinner').hide();

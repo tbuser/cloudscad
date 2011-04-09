@@ -132,6 +132,12 @@ canvas.object {
   border: 1px solid black;
 }
 
+#viewer {
+  width: 100%;
+  height: 300px;
+  border: 1px solid black;  
+}
+
 .warning {
   color: red;
 }

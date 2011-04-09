@@ -1,20 +1,22 @@
+<% thingiview_init %>
+
 <p>
-<%= button_to_function "Top", "camera_view('top')" %>
-<%= button_to_function "Side", "camera_view('side')" %>
-<%= button_to_function "Bottom", "camera_view('bottom')" %>
-<%= button_to_function "Diagonal", "camera_view('diagonal')" %>
+  <%= button_to_function "Top", "thingiview.setCameraView('top')" %>
+  <%= button_to_function "Side", "thingiview.setCameraView('side')" %>
+  <%= button_to_function "Bottom", "thingiview.setCameraView('bottom')" %>
+  <%= button_to_function "Diagonal", "thingiview.setCameraView('diagonal')" %>
 
-<%= button_to_function "Zoom +", "camera_zoom(5)" %>
-<%= button_to_function "Zoom -", "camera_zoom(-5)" %>
+  <%= button_to_function "Zoom +", "thingiview.setCameraZoom(5)" %>
+  <%= button_to_function "Zoom -", "thingiview.setCameraZoom(-5)" %>
 
-<%= button_to_function "Toggle Rotation", "toggleRotate();" %>
+  <%= button_to_function "Toggle Rotation", "thingiview.setRotation(!thingiview.getRotation());" %>
 </p>
 
-<div id="canvas_container"></div>
+<div id="viewer"></div>
 
 <p>
-<%= button_to_function "Wireframe", "stl_material('wireframe')" %>
-<%= button_to_function "Solid", "stl_material('solid')" %>
+  <%= button_to_function "Wireframe", "thingiview.setObjectMaterial('wireframe')" %>
+  <%= button_to_function "Solid", "thingiview.setObjectMaterial('solid')" %>
 </p>
 
 <div id="openscad_output"></div>

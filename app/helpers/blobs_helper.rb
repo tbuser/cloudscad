@@ -13,4 +13,18 @@ module BlobsHelper
       "Binary Data"
     end    
   end
+  
+  def thingiview_init(extra_code="")
+    content_for(:head) do
+      javascript_tag("
+        window.onload = function() {
+          thingiurlbase = '/javascripts/thingiview/';
+          thingiview = new Thingiview('viewer');
+          thingiview.setObjectColor('#C0D8F0');
+          thingiview.initScene();
+          #{extra_code}
+        }
+      ")
+    end
+  end
 end

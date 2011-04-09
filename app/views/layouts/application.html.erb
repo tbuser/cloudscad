@@ -93,25 +93,12 @@
   <link id="bespin_base" href="/javascripts/bespin"/>
   <%= javascript_include_tag 'bespin/BespinEmbedded' %>
   
-  <!-- 
-  <%= javascript_include_tag 'canvas3d/scene' %>
-  <%= javascript_include_tag 'canvas3d/vec3' %>
-  <%= javascript_include_tag 'canvas3d/matrix3' %>
-  <%= javascript_include_tag 'canvas3d/camera' %>
-  <%= javascript_include_tag 'canvas3d/mesh' %>
-  <%= javascript_include_tag 'canvas3d/light' %>
-  <%= javascript_include_tag 'canvas3d/setup' %>
-  -->
+  <%= javascript_include_tag 'thingiview/Three' %>
+  <%= javascript_include_tag 'thingiview/plane' %>
+  <%= javascript_include_tag 'thingiview/thingiview' %>
 
-  <%= javascript_include_tag 'three' %>
-  <script type="text/javascript" src="http://github.com/mrdoob/stats.js/raw/master/build/Stats.js"></script>  
   <%= javascript_include_tag 'plugins' %>
   <%= javascript_include_tag 'script' %>
-
-  <%= javascript_include_tag 'plane' %>
-  <%= javascript_include_tag 'stl_geometry' %>
-  <%= javascript_include_tag 'stl_viewer' %>
-
   <%= javascript_include_tag 'rails' %>
   
   <script>

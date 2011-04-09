@@ -14,14 +14,14 @@ var editor = null;
 $(document).ready(function() {
   $('#custom_scad_render_form').submit(function(e) {
     $('#render_spinner').show();
-    info.innerHTML = "Loading STL.  Please Wait..."
+    // info.innerHTML = "Loading STL.  Please Wait..."
     $.post($(this).attr('action'), $('#custom_scad_form :input:not([type=hidden])').serialize(), null, "script");  
     return false;  
   });
 
   $('#scad_render').click(function(e) {
     $('#render_spinner').show();
-    info.innerHTML = "Loading STL.  Please Wait..."
+    // info.innerHTML = "Loading STL.  Please Wait..."
     $.post('/scad', $.param({code:editor.value}), null, "script");  
     return false;
   });

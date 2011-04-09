@@ -1,10 +1,12 @@
 <% title "STL Viewer Demo" %>
 
+<% thingiview_init("thingiview.loadSTLString(document.getElementById('stl_data').value);") %>
+
 <p>
-  This is an STL to three.js model viewer done totally in javascript.
+  This is an STL to three.js model viewer done totally in javascript using <a href="https://github.com/tbuser/thingiview.js">Thingiview.js</a>.
 </p>
 
-<div id="canvas_container"></div>
+<div id="viewer"></div>
 
 <p>
   <%= label_tag "stl_data", "ASCII STL Data" %>
@@ -320,7 +322,7 @@
   endsolid OpenSCAD_Model
   ", :style => "width:100%;height:300px" %><br/>
 
-  <%= button_to_function "Render", "load_stl_string(document.getElementById('stl_data').value);" %><br/>
+  <%= button_to_function "Render", "thingiview.loadSTLString(document.getElementById('stl_data').value)" %><br/>
 </p>
 
 <pre><p id="debug"></p></pre>
