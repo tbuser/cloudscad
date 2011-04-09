@@ -40,7 +40,7 @@ class Project < ActiveRecord::Base
       treeish = ""
     end
     
-    "/#{user.username}/#{name}/#{content_type}/#{treeish}/#{path}".gsub(/\/+/, '/')
+    "/#{user.username}/#{name}/#{content_type}/#{treeish}/#{path}".gsub(/\/+/, '/').gsub(/\/$/, '')
   end
   
   # TODO: move to a seperate blob model...

@@ -1,9 +1,19 @@
-one:
-  username: MyString
-  email: MyString
-  password: MyString
+tony:
+  id: 1
+  username: tbuser
+  email: tbuser@gmail.com
+  crypted_password: 01fdc25806bc8036686a0a767e015f6ecb8c7ff5dd556e5d97beb88c931d06dde9a8bea2feaf58f938cc1bee425d127a5f2e54f10fb51e682de14554551a9353
+  password_salt: XZnKfRtjEyXihRlec0lK
+  persistence_token: 99d8a65a270cff7055517c2b0820d486771766df7509f73008a0f90bb9089b6c879d19dac872e66ecb1719c99790201f020c16c6ba2fbe36746124b76ca54499
+  created_at: <%= Time.now - 1.day %>
+  updated_at: <%= Time.now - 1.day %>
 
-two:
-  username: MyString
-  email: MyString
-  password: MyString
+john:
+  id: 2
+  username: jdoe
+  email: jdoe@test.com
+  crypted_password: 01fdc25806bc8036686a0a767e015f6ecb8c7ff5dd556e5d97beb88c931d06dde9a8bea2feaf58f938cc1bee425d127a5f2e54f10fb51e682de14554551a9353
+  password_salt: XZnKfRtjEyXihRlec0lK
+  persistence_token: 99d8a65a270cff7055517c2b0820d486771766df7509f73008a0f90bb9089b6c879d19dac872e66ecb1719c99790201f020c16c6ba2fbe36746124b76ca54499
+  created_at: <%= Time.now %>
+  updated_at: <%= Time.now %>
