@@ -23,15 +23,6 @@ ActiveRecord::Schema.define(:version => 20100903035349) do
   add_index "projects", ["name"], :name => "index_projects_on_name"
   add_index "projects", ["user_id"], :name => "index_projects_on_user_id"
 
-  create_table "scripts", :force => true do |t|
-    t.string   "name"
-    t.text     "code"
-    t.datetime "created_at"
-    t.datetime "updated_at"
-    t.integer  "user_id"
-    t.text     "description"
-  end
-
   create_table "users", :force => true do |t|
     t.string   "username"
     t.string   "email"
