@@ -64,7 +64,7 @@ GEM
     mongrel (1.2.0.pre2)
       daemons (~> 1.0.10)
       gem_plugin (~> 0.2.3)
-    mysql (2.8.1)
+    mysql2 (0.2.7)
     net-scp (1.0.3)
       net-ssh (>= 1.99.1)
     net-sftp (2.0.5)
@@ -107,6 +107,6 @@ DEPENDENCIES
   coderay
   grit
   mongrel (= 1.2.0.pre2)
-  mysql (= 2.8.1)
+  mysql2 (= 0.2.7)
   rails (= 3.0.0)
   will_paginate (~> 3.0.pre2)
